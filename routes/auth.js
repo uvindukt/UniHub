@@ -1,14 +1,14 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const authorize = require("../../middleware/authentication.student");
+const authorize = require("../middleware/authentication.student");
 
 const router = express.Router();
 router.use(express.json());
 
-const jwtSecret = require("../../config/keys").jwtSecret;
-const Student = require("../../models/model.student");
-const Admin = require("../../models/model.admin");
+const jwtSecret = require("../config/keys").jwtSecret;
+const Student = require("../models/model.student");
+const Admin = require("../models/model.admin");
 
 /**
  * @route POST api/auth

@@ -1,7 +1,7 @@
 const express = require("express");
-const authStudent = require("../../middleware/authentication.student");
-const validation = require("../../middleware/validation");
-const StudentController = require("../../controller/controller.student");
+const authStudent = require("../middleware/authentication.student");
+const validation = require("../middleware/validation");
+const StudentController = require("../controller/controller.student");
 
 const router = express.Router();
 

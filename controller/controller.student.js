@@ -19,22 +19,27 @@ class StudentController {
             Student.findOne({ email: data.email })
                 .exec()
                 .then(student => {
+
                     if (student) {
                         reject({ status: 400, msg: "Student already exists." });
                     } else {
                         bcrypt
                             .genSalt(10)
                             .then(salt => {
+
                                 //Hashing the password before storing in database.
                                 bcrypt
                                     .hash(newStudent.password, salt)
                                     .then(hash => newStudent.password = hash)
                                     .then(() => {
+
                                         newStudent
                                             .save()
                                             .then(student => {
+
                                                 //Removing the password from returning student object.
                                                 student.password = undefined;
+
                                                 //Adding the token to the newly registered student immediately.
                                                 jwt.sign({ id: student._id }, jwtSecret, (err, token) => {
                                                     if (err)
@@ -48,13 +53,17 @@ class StudentController {
                                                             status: 200
                                                         });
                                                 });
+
                                             })
                                             .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
                                     })
                                     .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
                             })
                             .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
                     }
+
                 })
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
         });
@@ -143,7 +152,9 @@ class StudentController {
 
             if (updUser.password) {
 
-                if (!updUser.currentPassword) {
+                const { currentPassword } = updUser;
+
+                if (!currentPassword) {
 
                     return reject({ status: 400, msg: "Please enter current password." });
 
@@ -153,12 +164,14 @@ class StudentController {
                         .exec()
                         .then(student => {
 
-                            bcrypt.compare(updUser.currentPassword, student.password)
+                            bcrypt.compare(currentPassword, student.password)
                                 .then(isMatch => {
                                     if (isMatch) {
+
                                         //Hashing the password before storing in database.
                                         bcrypt.genSalt(10)
                                             .then(salt => {
+
                                                 bcrypt.hash(updUser.password, salt)
                                                     .then(hash => updUser.password = hash)
                                                     .then(() => {
@@ -176,6 +189,7 @@ class StudentController {
                                                                 msg: "Something went wrong.",
                                                                 err
                                                             }));
+
                                                     })
                                                     .catch(err => reject({
                                                         status: 500,
@@ -185,8 +199,11 @@ class StudentController {
 
                                             })
                                             .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
                                     } else {
+
                                         reject({ status: 400, msg: "Invalid current password." });
+
                                     }
 
                                 })

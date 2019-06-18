@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const CourseController = require('../../controller/controller.course');
+const CourseController = require('../controller/controller.course');
 
 /**
  * @desc Retrieve all courses.
