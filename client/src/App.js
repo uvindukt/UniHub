@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import Profile from "./components/Profile";
+import Admin from "./components/Admin";
 import NotFound from "./components/NotFound";
 import { bake_cookie, read_cookie, delete_cookie } from "sfcookies";
 
@@ -68,6 +69,9 @@ class App extends Component {
                         )}/>
                         <Route path="/profile" render={props => (
                             <Profile {...props} session={this.state} login={this.login}/>
+                        )}/>
+                        <Route path="/admin" render={props => (
+                            <Admin {...props} session={this.state} login={this.login}/>
                         )}/>
                         <Route component={NotFound}/>
                     </Switch>

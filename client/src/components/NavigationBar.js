@@ -102,7 +102,14 @@ class NavigationBar extends Component {
                     <DropdownItem>Assignments</DropdownItem>
                     <DropdownItem>Instructors</DropdownItem>
                     <DropdownItem divider/>
-                    <DropdownItem>Admin</DropdownItem>
+                    <DropdownItem>
+                        <Link exact to="/admin" className="navbar-brand">
+                            <FontAwesomeIcon
+                                icon={faUserSecret}
+                            />
+                            &ensp;Admin
+                        </Link>
+                    </DropdownItem>
                 </DropdownMenu>
             </UncontrolledDropdown>);
 

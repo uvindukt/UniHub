@@ -77,6 +77,15 @@ class Profile extends Component {
                                     URI={this.state.URI} token={this.state.token}
                                     resetPrompt={this.resetPrompt}/>;
 
+        let tel = "";
+        if (this.props.session.type !== 'admin')
+            tel = <tr>
+                <td><FontAwesomeIcon icon={faPhone}/>&emsp;Telephone</td>
+                <td>{`0${telephone}`}</td>
+                <td><Button onClick={() => this.renderPrompt(promptTelephone)}
+                            className="button m-0 py-1"><FontAwesomeIcon icon={faEdit}/></Button></td>
+            </tr>;
+
         return (
             <div className="container-fluid row mx-0 text-center">
                 <Col md={2}/>
@@ -100,12 +109,7 @@ class Profile extends Component {
                             <td><Button onClick={() => this.renderPrompt(promptEmail)}
                                         className="button m-0 py-1"><FontAwesomeIcon icon={faEdit}/></Button></td>
                         </tr>
-                        <tr>
-                            <td><FontAwesomeIcon icon={faPhone}/>&emsp;Telephone</td>
-                            <td>{`0${telephone}`}</td>
-                            <td><Button onClick={() => this.renderPrompt(promptTelephone)}
-                                        className="button m-0 py-1"><FontAwesomeIcon icon={faEdit}/></Button></td>
-                        </tr>
+                        {tel}
                         <tr>
                             <td><FontAwesomeIcon icon={faKey}/>&emsp;Password
                             </td>
