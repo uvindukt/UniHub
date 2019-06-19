@@ -11,6 +11,36 @@ body {
     color: #fff;
 }
 
+.select {
+    font-size: 1rem;
+    border-width: 0;
+    background-color: rgba(241, 243, 244, 1);
+    border-radius: 0.7rem;
+    height: 2.6rem;
+    resize: none;
+    outline: none;
+    transition-duration: 0.5s;
+    transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.select:hover {
+    background-color: rgba(232, 234, 237, 1);
+    transition-duration: 0.5s;
+    transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.select:focus {
+    box-shadow: 0 0.4629629629629629rem 0.5208333333333334rem 0 rgba(0, 0, 0, 0.3);
+}
+
+.select:focus:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.select:disabled {
+    background-color: rgba(241, 243, 244, 0);
+}
+
 .adTextBox {
     font-size: 1rem;
     border-width: 0;
@@ -44,7 +74,7 @@ body {
 }
 
 .textBox:focus {
-    box-shadow: 0 0.4629629629629629vh 0.5208333333333334vw 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.4629629629629629rem 0.5208333333333334rem 0 rgba(0, 0, 0, 0.3);
 }
 
 .textBox:focus:hover {
@@ -57,7 +87,7 @@ body {
 
 .button {
     background-color: transparent;
-    box-shadow: 0 0.4629629629629629vh 0.5208333333333334vw 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.4629629629629629rem 0.5208333333333334rem 0 rgba(0, 0, 0, 0.3);
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     margin: 1rem 0.5rem;
@@ -70,14 +100,14 @@ body {
 }
 
 .button:focus {
-    box-shadow: 0 0.4629629629629629vh 0.5208333333333334vw 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.4629629629629629rem 0.5208333333333334rem 0 rgba(0, 0, 0, 0.3);
 }
 
 .button:hover {
     background-color: rgba(0, 128, 0, 1);
     color: white;
     cursor: pointer;
-    box-shadow: 0 0.9259259259259258vh 1.0416666666666667vw 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.9259259259259258rem 1.0416666666666667rem 0 rgba(0, 0, 0, 0.3);
     transition-duration: 0.5s;
     transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
 }
@@ -90,12 +120,12 @@ body {
 }
 
 .navBar {
-    box-shadow: 0 0.4629629629629629vh 0.5208333333333334vw 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.4629629629629629rem 0.5208333333333334rem 0 rgba(0, 0, 0, 0.3);
 }
 
 .loginCard {
     border-radius: 1rem;
-    box-shadow: 0 0.4629629629629629vh 0.5208333333333334vw 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.4629629629629629rem 0.5208333333333334rem 0 rgba(0, 0, 0, 0.3);
 }
 
 .modalAlert {

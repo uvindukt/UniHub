@@ -19,7 +19,8 @@ import {
     faGraduationCap,
     faUserGraduate,
     faUserTie,
-    faUserSecret
+    faUserSecret,
+    faBook
 } from "@fortawesome/free-solid-svg-icons";
 
 class NavigationBar extends Component {
@@ -94,24 +95,67 @@ class NavigationBar extends Component {
                 </React.Fragment>
             );
 
-            drop = (<UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                    Options
-                </DropdownToggle>
-                <DropdownMenu right>
-                    <DropdownItem>Assignments</DropdownItem>
-                    <DropdownItem>Instructors</DropdownItem>
-                    <DropdownItem divider/>
-                    <DropdownItem>
-                        <Link exact to="/admin" className="navbar-brand">
-                            <FontAwesomeIcon
-                                icon={faUserSecret}
-                            />
-                            &ensp;Admin
-                        </Link>
-                    </DropdownItem>
-                </DropdownMenu>
-            </UncontrolledDropdown>);
+            if (type === "admin") {
+                drop = (<UncontrolledDropdown nav inNavbar>
+                    <DropdownToggle nav caret>
+                        Options
+                    </DropdownToggle>
+                    <DropdownMenu right>
+                        <DropdownItem>
+                            <Link exact to="/course" className="navbar-brand">
+                                <span style={{color: '#5cb85c', fontSize: 'large'}}>
+                                <FontAwesomeIcon
+                                    icon={faBook}
+                                />
+                                &ensp;Courses
+                                </span>
+                            </Link>
+                        </DropdownItem>
+                        <DropdownItem>
+                            <Link exact to="/instructor" className="navbar-brand">
+                                <span style={{color: '#5cb85c', fontSize: 'large'}}>
+                                <FontAwesomeIcon
+                                    icon={faUserTie}
+                                />
+                                &ensp;Instructors
+                                </span>
+                            </Link>
+                        </DropdownItem>
+                        <DropdownItem divider/>
+                        <DropdownItem>
+                            <Link exact to="/admin" className="navbar-brand">
+                                <span style={{color: '#F00', fontSize: 'large'}}>
+                                <FontAwesomeIcon
+                                    icon={faUserSecret}
+                                />
+                                &ensp;Admin
+                                </span>
+                            </Link>
+                        </DropdownItem>
+                    </DropdownMenu>
+                </UncontrolledDropdown>);
+            } else if (type === "instructor") {
+                drop = (<UncontrolledDropdown nav inNavbar>
+                    <DropdownToggle nav caret>
+                        Options
+                    </DropdownToggle>
+                    <DropdownMenu right>
+                        <DropdownItem>Courses</DropdownItem>
+                        <DropdownItem>Notifications</DropdownItem>
+                    </DropdownMenu>
+                </UncontrolledDropdown>);
+            } else {
+                drop = (<UncontrolledDropdown nav inNavbar>
+                    <DropdownToggle nav caret>
+                        Options
+                    </DropdownToggle>
+                    <DropdownMenu right>
+                        <DropdownItem>Courses</DropdownItem>
+                        <DropdownItem>Notifications</DropdownItem>
+                    </DropdownMenu>
+                </UncontrolledDropdown>);
+            }
+
 
         }
 

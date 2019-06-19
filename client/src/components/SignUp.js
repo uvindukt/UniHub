@@ -5,7 +5,9 @@ import {
     InputGroupAddon,
     InputGroupText,
     Input,
-    Button
+    Button,
+    FormGroup,
+    FormText
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -78,7 +80,7 @@ class SignUp extends Component {
                     : this.setState({ alert: true, alertText: data.msg });
                 return data;
             })
-            .then( data => {
+            .then(data => {
                 setTimeout(() => {
                     this.props.login({
                         isAuthenticated: true,
@@ -86,7 +88,7 @@ class SignUp extends Component {
                         token: data.token,
                         type: data.type
                     });
-                }, 2000)
+                }, 2000);
             })
             .catch(err => console.error(err));
     };
@@ -179,7 +181,8 @@ class SignUp extends Component {
                                 </Col>
                             </div>
                             <div className="row container-fluid mr-0 pr-0">
-                                <Col md={12} className="mb-4">
+                                <Col md={12} className="mb-0">
+                                    <FormGroup className="text-left">
                                     <InputGroup>
                                         <InputGroupAddon addonType="prepend">
                                             <InputGroupText className="adTextBox">
@@ -197,6 +200,8 @@ class SignUp extends Component {
                                             placeholder="E-Mail"
                                         />
                                     </InputGroup>
+                                        <FormText className="ml-3">Please enter a valid email address.</FormText>
+                                    </FormGroup>
                                 </Col>
                             </div>
                             <div className="row container-fluid mr-0 pr-0">
@@ -238,24 +243,28 @@ class SignUp extends Component {
                                 </Col>
                             </div>
                             <div className="row container-fluid mr-0 pr-0">
-                                <Col md={12} className="mb-4">
-                                    <InputGroup>
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText className="adTextBox">
-                                                <FontAwesomeIcon icon={faPhone}/>
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input
-                                            autoComplete="off"
-                                            required
-                                            value={this.state.telephone}
-                                            onChange={this.handleChange}
-                                            type="text"
-                                            className="textBox"
-                                            name="telephone"
-                                            placeholder="Telephone"
-                                        />
-                                    </InputGroup>
+                                <Col md={12} className="mb-0">
+                                    <FormGroup className="text-left">
+                                        <InputGroup>
+                                            <InputGroupAddon addonType="prepend">
+                                                <InputGroupText className="adTextBox">
+                                                    <FontAwesomeIcon icon={faPhone}/>
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input
+                                                autoComplete="off"
+                                                required
+                                                value={this.state.telephone}
+                                                onChange={this.handleChange}
+                                                type="text"
+                                                className="textBox"
+                                                name="telephone"
+                                                placeholder="Telephone"
+                                            />
+                                        </InputGroup>
+                                        <FormText className="ml-3">Telephone number should be 10 digits, starting from
+                                            0.</FormText>
+                                    </FormGroup>
                                 </Col>
                             </div>
                             <div className="row container-fluid mr-0 pr-0">

@@ -12,29 +12,28 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faEnvelope,
-    faUserSecret,
-    faKey,
-    faUserPlus
+    faUserTie,
+    faUserPlus,
+    faPhone
 } from "@fortawesome/free-solid-svg-icons";
 import { Redirect } from "react-router-dom";
 import Alert from "./Alert";
 
 
-class Admin extends Component {
+class Instructor extends Component {
     constructor(props) {
         super(props);
         this.state = {
             name: "",
             email: "",
-            password: "",
-            confirmPassword: "",
+            telephone: "",
             alert: false,
             alertText: null
         };
     }
 
     componentDidMount() {
-        document.title = "UniHub | Admin";
+        document.title = "UniHub | Instructor";
     }
 
     resetAlert = () => {
@@ -63,12 +62,11 @@ class Admin extends Component {
             body: JSON.stringify({
                 name: this.state.name,
                 email: this.state.email,
-                password: this.state.password,
-                confirmPassword: this.state.confirmPassword
+                telephone: this.state.telephone
             })
         };
 
-        fetch("/api/admin", packet)
+        fetch("/api/instructor", packet)
             .then(result => result.json())
             .then(data => {
                 data.success
@@ -93,7 +91,7 @@ class Admin extends Component {
 
                 </Col>
                 <Col md={6} className="container-fluid text-center">
-                    <h1 className="mt-4 mb-4 text-success">Add New Admin</h1>
+                    <h1 className="mt-4 mb-4 text-success">Add New Instructor</h1>
                     <hr/>
                     <form onSubmit={this.handleSubmit}>
                         <div className="mr-0">
@@ -102,7 +100,7 @@ class Admin extends Component {
                                     <InputGroup>
                                         <InputGroupAddon addonType="prepend">
                                             <InputGroupText className="adTextBox">
-                                                <FontAwesomeIcon icon={faUserSecret}/>
+                                                <FontAwesomeIcon icon={faUserTie}/>
                                             </InputGroupText>
                                         </InputGroupAddon>
                                         <Input
@@ -121,70 +119,57 @@ class Admin extends Component {
                             <div className="row container-fluid mr-0 pr-0">
                                 <Col md={12} className="mb-0">
                                     <FormGroup className="text-left">
-                                    <InputGroup>
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText className="adTextBox">
-                                                <FontAwesomeIcon icon={faEnvelope}/>
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input
-                                            autoComplete="off"
-                                            required
-                                            value={this.state.email}
-                                            onChange={this.handleChange}
-                                            className="textBox"
-                                            type="email"
-                                            name="email"
-                                            placeholder="E-Mail"
-                                        />
-                                    </InputGroup>
+                                        <InputGroup>
+                                            <InputGroupAddon addonType="prepend">
+                                                <InputGroupText className="adTextBox">
+                                                    <FontAwesomeIcon icon={faEnvelope}/>
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input
+                                                autoComplete="off"
+                                                required
+                                                value={this.state.email}
+                                                onChange={this.handleChange}
+                                                className="textBox"
+                                                type="email"
+                                                name="email"
+                                                placeholder="E-Mail"
+                                            />
+                                        </InputGroup>
                                         <FormText className="ml-3">Please enter a valid email address.</FormText>
                                     </FormGroup>
                                 </Col>
                             </div>
                             <div className="row container-fluid mr-0 pr-0">
-                                <Col md={6} className="mb-4">
-                                    <InputGroup>
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText className="adTextBox">
-                                                <FontAwesomeIcon icon={faKey}/>
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input
-                                            required
-                                            value={this.state.password}
-                                            onChange={this.handleChange}
-                                            className="textBox"
-                                            type="password"
-                                            name="password"
-                                            placeholder="New Password"
-                                        />
-                                    </InputGroup>
-                                </Col>
-                                <Col md={6} className="mb-4">
-                                    <InputGroup>
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText className="adTextBox">
-                                                <FontAwesomeIcon icon={faKey}/>
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input
-                                            required
-                                            value={this.state.confirmPassword}
-                                            onChange={this.handleChange}
-                                            className="textBox"
-                                            type="password"
-                                            name="confirmPassword"
-                                            placeholder="Confirm Password"
-                                        />
-                                    </InputGroup>
+                                <Col md={12} className="mb-0">
+                                    <FormGroup className="text-left">
+                                        <InputGroup>
+                                            <InputGroupAddon addonType="prepend">
+                                                <InputGroupText className="adTextBox">
+                                                    <FontAwesomeIcon icon={faPhone}/>
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input
+                                                autoComplete="off"
+                                                required
+                                                value={this.state.telephone}
+                                                onChange={this.handleChange}
+                                                type="text"
+                                                className="textBox"
+                                                name="telephone"
+                                                placeholder="Telephone"
+                                            />
+                                        </InputGroup>
+                                        <FormText className="ml-3">Telephone number should be 10 digits, starting from
+                                            0.</FormText>
+                                    </FormGroup>
                                 </Col>
                             </div>
                             <div className="row container-fluid mr-0 pr-0">
                                 <Col md={12} className="mb-4 text-center">
                                     <Button className="button">
                                         <FontAwesomeIcon icon={faUserPlus}/>
-                                        &ensp;Add Admin
+                                        &ensp;Add Instructor
                                     </Button>
                                 </Col>
                             </div>
@@ -197,4 +182,4 @@ class Admin extends Component {
     }
 }
 
-export default Admin;
+export default Instructor;
