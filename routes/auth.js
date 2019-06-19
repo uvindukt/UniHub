@@ -9,6 +9,7 @@ router.use(express.json());
 const jwtSecret = require("../config/keys").jwtSecret;
 const Student = require("../models/model.student");
 const Admin = require("../models/model.admin");
+const Instructor = require("../models/model.instructor");
 
 /**
  * @route POST api/auth
@@ -21,7 +22,8 @@ router.post("/", (req, res) => {
 
     if (!email || !password) return res.status(400).send({ msg: "Please fill all the fields." });
 
-    Student.findOne({ email })
+    Student
+        .findOne({ email })
         .exec()
         .then(user => {
             if (user) {
@@ -37,7 +39,8 @@ router.post("/", (req, res) => {
                     })
                     .catch(err => res.status(500).send(err));
             } else {
-                Admin.findOne({ email })
+                Admin
+                    .findOne({ email })
                     .exec()
                     .then(user => {
                         if (user) {
@@ -53,7 +56,27 @@ router.post("/", (req, res) => {
                                 })
                                 .catch(err => res.status(500).send(err));
                         } else {
-                            res.status(404).send({ msg: "User does not exist." });
+                            Instructor
+                                .findOne({ email })
+                                .exec()
+                                .then(user => {
+                                    if (user) {
+                                        bcrypt.compare(password, user.password)
+                                            .then(isMatch => {
+                                                if (!isMatch)
+                                                    return res.status(400).send({ msg: "Invalid Credentials." });
+                                                jwt.sign({ id: user._id }, jwtSecret, (err, token) => {
+                                                    if (err) throw err;
+                                                    user.password = undefined;
+                                                    res.json({ user, token, type: "instructor" });
+                                                });
+                                            })
+                                            .catch(err => res.status(500).send(err));
+                                    } else {
+                                        res.status(404).send({ msg: "User does not exist." });
+                                    }
+                                })
+                                .catch(err => res.status(500).send(err));
                         }
                     })
                     .catch(err => res.status(500).send(err));

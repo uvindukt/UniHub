@@ -19,7 +19,7 @@ const StudentSchema = new mongoose.Schema({
   },
 
   telephone: {
-    type: Number,
+    type: String,
     required: true
   }
 

@@ -12,8 +12,10 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "express": "^4.16.4",
+    "generate-password": "^1.4.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.5.4",
+    "nodemailer": "^6.2.1",
     "validator": "^10.11.0"
   },
   "devDependencies": {

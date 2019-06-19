@@ -88,6 +88,83 @@ class CourseController {
 
     }
 
+    /**
+     * @desc Add a student to the course.
+     * @param courseId
+     * @param studentId
+     * @returns {Promise<JSON>}
+     */
+    static addStudent(courseId, studentId) {
+
+        return new Promise((resolve, reject) => {
+
+            Course
+                .findByIdAndUpdate(courseId, { $push: { students: studentId } })
+                .exec()
+                .then(course => resolve({ status: 200, msg: `Student added to the ${course.name}.`, course }))
+                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        });
+
+    }
+
+    /**
+     * @desc Remove a student to the course.
+     * @param courseId
+     * @param studentId
+     * @returns {Promise<JSON>}
+     */
+    static removeStudent(courseId, studentId) {
+
+        return new Promise((resolve, reject) => {
+
+            Course
+                .findByIdAndUpdate(courseId, { $pull: { students: studentId } })
+                .exec()
+                .then(course => resolve({ status: 200, msg: `Student removed from ${course.name}.`, course }))
+                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        });
+
+    }
+
+    /**
+     * @desc Assign a instructor to the course.
+     * @param courseId
+     * @param instructorId
+     * @returns {Promise<any>}
+     */
+    static addInstructor(courseId, instructorId) {
+
+        return new Promise((resolve, reject) => {
+
+            Course
+                .findByIdAndUpdate(courseId, { instructor: instructorId })
+                .then(course => resolve({ status: 200, msg: `Instructor added to ${course.name}.`, course }))
+                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        });
+
+    }
+
+    /**
+     * @desc Remove the instructor from the course.
+     * @param courseId
+     * @returns {Promise<any>}
+     */
+    static removeInstructor(courseId) {
+
+        return new Promise((resolve, reject) => {
+
+            Course
+                .findByIdAndUpdate(courseId, { $unset: "instructor" })
+                .then(course => resolve({ status: 200, msg: `Instructor removed from ${course.name}.`, course }))
+                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        });
+
+    }
+
 }
 
 module.exports = CourseController;

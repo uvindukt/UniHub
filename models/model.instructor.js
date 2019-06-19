@@ -12,6 +12,11 @@ const InstructorSchema = mongoose.Schema({
         required: true
     },
 
+    password: {
+        type: String,
+        required: true
+    },
+
     telephone: {
         type: String
     },

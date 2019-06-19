@@ -34,7 +34,8 @@ app.use(express.json());
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/student", require("./routes/router.student"));
 app.use("/api/admin", require("./routes/router.admin"));
-app.use("api/course", require("./routes/router.course"));
+app.use("/api/course", require("./routes/router.course"));
+app.use("/api/instructor", require("./routes/router.instructor"));
 
 const PORT = process.env.PORT || 5000;
 

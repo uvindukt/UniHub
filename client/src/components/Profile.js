@@ -81,7 +81,7 @@ class Profile extends Component {
         if (this.props.session.type !== 'admin')
             tel = <tr>
                 <td><FontAwesomeIcon icon={faPhone}/>&emsp;Telephone</td>
-                <td>{`0${telephone}`}</td>
+                <td>{telephone}</td>
                 <td><Button onClick={() => this.renderPrompt(promptTelephone)}
                             className="button m-0 py-1"><FontAwesomeIcon icon={faEdit}/></Button></td>
             </tr>;
