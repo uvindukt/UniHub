@@ -1,21 +1,38 @@
 const Course = require("../models/model.course");
+const MailService = require("../service/service.mail");
 
 class CourseController {
 
     /**
      * @desc Create a new course.
      * @param data
+     * @param instructor
      * @returns {Promise<JSON>}
      */
-    static createCourse(data) {
+    static createCourse(data, instructor) {
 
         return new Promise((resolve, reject) => {
 
-            let course = new Course(data);
+            let newCourse = new Course(data);
 
-            course
-                .save()
-                .then(course => resolve({ status: 200, msg: "Course created successfully.", course }))
+            Course
+                .findOne({code: data.code})
+                .exec()
+                .then(course => {
+                    if (course) {
+                        reject({ status: 400, msg: "Course already exists."})
+                    } else {
+                        newCourse
+                            .save()
+                            .then(course => {
+                                let message = MailService.getAddedToCourseMessage(course);
+                                MailService.sendMail(instructor.email, "Assigned to a course", message);
+                                return course;
+                            })
+                            .then(course => resolve({ status: 200, msg: "Course created successfully.", course }))
+                            .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+                    }
+                })
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
         });

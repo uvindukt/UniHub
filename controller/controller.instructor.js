@@ -34,7 +34,8 @@ class InstructorController {
                                 newInstructor
                                     .save()
                                     .then(instructor => {
-                                        MailService.sendMail(instructor, password, 'Instructor');
+                                        let message = MailService.getUserCreatedMessage(instructor, password, 'Instructor');
+                                        MailService.sendMail(instructor.email, "UniHub Account", message);
                                         instructor.password = undefined;
                                         return instructor;
                                     })
@@ -72,6 +73,54 @@ class InstructorController {
                        : reject({ status: 404, msg: "Could not find any instructors." })
                )
                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        });
+
+    }
+
+    /**
+     * @desc Get instructor by id.
+     * @param id
+     * @returns {Promise<JSON>}
+     */
+    static getInstructorById(id) {
+
+        return new Promise((resolve, reject) => {
+
+            Instructor
+                .findById(id)
+                .select("-password")
+                .exec()
+                .then(instructor => {
+                    instructor
+                        ? resolve({ status: 200, instructor })
+                        : reject({ status: 404, msg: "Instructor does not exist." });
+                })
+                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        });
+
+    }
+
+    /**
+     * @desc Get instructor by email.
+     * @param email
+     * @returns {Promise<JSON>}
+     */
+    static getInstructorByEmail(email) {
+
+        return new Promise((resolve, reject) => {
+
+            Instructor
+                .findOne({ email })
+                .select("-password")
+                .exec()
+                .then(instructor => {
+                    instructor
+                        ? resolve({ status: 200, instructor })
+                        : reject({ status: 404, msg: "Instructor does not exist." });
+                })
+                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
         });
 

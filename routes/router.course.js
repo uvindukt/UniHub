@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const CourseController = require('../controller/controller.course');
+const InstructorController = require("../controller/controller.instructor");
 
 /**
  * @desc Retrieve all courses.
@@ -51,10 +52,16 @@ router.get('/code/:code', (req, res) => {
  */
 router.post('/', (req, res) => {
 
-    CourseController
-        .createCourse(req.body)
-        .then(result => res.json(result))
-        .catch(err => res.status(err.status).json(err));
+    InstructorController
+        .getInstructorById(req.body.instructor)
+        .then(result => {
+            const { instructor } = result;
+            CourseController
+                .createCourse(req.body, instructor)
+                .then( result => res.json(result))
+                .catch(err => res.status(err.status).json(err));
+        })
+        .catch(err => res.status(err.status).json(err))
 
 });
 
