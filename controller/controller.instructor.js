@@ -70,7 +70,7 @@ class InstructorController {
                .then(instructors =>
                    instructors.length >= 1
                        ? resolve({ status: 200, instructors })
-                       : reject({ status: 404, msg: "Could not find any instructors." })
+                       : reject({ status: 404, msg: "Could not find any instructors.", instructors })
                )
                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
@@ -120,6 +120,79 @@ class InstructorController {
                         ? resolve({ status: 200, instructor })
                         : reject({ status: 404, msg: "Instructor does not exist." });
                 })
+                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        });
+
+    }
+
+    /**
+     * @desc Update instructor by id.
+     * @param id
+     * @param data
+     * @returns {Promise<JSON>}
+     */
+    static updateInstructorById(id, data) {
+
+        return new Promise((resolve, reject) => {
+
+            let updInstructor = data;
+
+            if (updInstructor.password) {
+
+                const { currentPassword } = updInstructor;
+                if (!currentPassword)
+                    return reject({ status: 400, msg: "Please enter current password." });
+
+                bcrypt.genSalt(10)
+                    .then(salt => {
+                        bcrypt.hash(updInstructor.password, salt)
+                            .then(hash => updInstructor.password = hash)
+                            .then(() => {
+                                Instructor
+                                    .findByIdAndUpdate(id, updInstructor, { new: true })
+                                    .select("-password")
+                                    .exec()
+                                    .then(user => resolve({
+                                        status: 200,
+                                        success: "Instructor updated successfully.",
+                                        user
+                                    }))
+                                    .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+                            })
+                            .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+                    })
+                    .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+            } else {
+
+                Instructor
+                    .findByIdAndUpdate(id, updInstructor, { new: true })
+                    .select("-password")
+                    .exec()
+                    .then(user => resolve({ status: 200, success: "Instructor updated successfully.", user }))
+                    .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+            }
+
+        });
+
+    }
+
+    /**
+     * @desc Delete instructor by id.
+     * @param id
+     * @returns {Promise<JSON>}
+     */
+    static deleteInstructorById(id) {
+
+        return new Promise((resolve, reject) => {
+
+            Instructor
+                .findByIdAndRemove(id, { new: true })
+                .select("-password")
+                .exec()
+                .then(instructor => resolve({ status: 200, msg: "Instructor deleted.", instructor }))
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
         });

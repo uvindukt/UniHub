@@ -2,11 +2,11 @@ const jwt = require("jsonwebtoken");
 
 const jwtSecret = require("../config/keys").jwtSecret;
 
-const authenticationStudent = (req, res, next) => {
+const authenticationInstructor = (req, res, next) => {
     const token = req.header('x-authorize-token');
     const type = req.header('x-authorize-type');
 
-    if (type !== "student")
+    if (type !== "instructor")
         return res.status(401).send({msg: 'Authorization denied.'});
 
     //Checking whether there is a token in the request.
@@ -21,4 +21,4 @@ const authenticationStudent = (req, res, next) => {
     }
 };
 
-module.exports = authenticationStudent;
+module.exports = authenticationInstructor;

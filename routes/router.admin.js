@@ -1,6 +1,6 @@
 const express = require("express");
 const validation = require("../middleware/validation");
-const authorizeAdmin = require("../middleware/authentication.admin");
+const authAdmin = require("../middleware/authentication.admin");
 const AdminController = require("../controller/controller.admin");
 
 const router = express.Router();
@@ -52,7 +52,7 @@ router.get("/:id", (req, res) => {
  * @desc Create an admin.
  * @access Private.
  */
-router.post('/', authorizeAdmin, validation, (req, res) => {
+router.post('/', authAdmin, validation, (req, res) => {
 
     AdminController
         .createAdmin(req.body)
@@ -66,7 +66,7 @@ router.post('/', authorizeAdmin, validation, (req, res) => {
  * @desc Update an admin from given ID.
  * @access Private.
  */
-router.put('/:id', validation, (req, res) => {
+router.put('/:id', authAdmin, validation, (req, res) => {
 
     AdminController
         .updateAdminById(req.params.id, req.body)
@@ -78,7 +78,7 @@ router.put('/:id', validation, (req, res) => {
 /**
  * @route DELETE api/admin
  * @desc Delete an admin from given ID.
- * @access Private.
+ * @access Public.
  */
 router.delete('/:id', (req, res) => {
 

@@ -62,7 +62,7 @@ class ProfilePrompt extends Component {
                 if (data.success) {
                     this.props.login({
                         isAuthenticated: true,
-                        user: data.student,
+                        user: data.user,
                         token: this.props.token,
                         type: this.props.type
                     });

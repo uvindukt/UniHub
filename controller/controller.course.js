@@ -14,6 +14,7 @@ class CourseController {
         return new Promise((resolve, reject) => {
 
             let newCourse = new Course(data);
+            newCourse.instructor = instructor;
 
             Course
                 .findOne({code: data.code})
@@ -53,7 +54,7 @@ class CourseController {
                 .then(courses =>
                     courses.length >= 1
                         ? resolve({ status: 200, courses })
-                        : reject({ status: 404, msg: "Could not find any courses." })
+                        : reject({ status: 404, msg: "Could not find any courses.", courses })
                 )
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 

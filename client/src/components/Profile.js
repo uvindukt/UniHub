@@ -31,7 +31,7 @@ class Profile extends Component {
             this.state = {
                 prompt: false,
                 promptText: null,
-                URI: `/api/student/${_id}`,
+                URI: `/api/${this.props.session.type}/${_id}`,
                 type: this.props.session.type,
                 token: this.props.session.token,
                 name,
@@ -71,13 +71,13 @@ class Profile extends Component {
 
         let { name, email, telephone } = this.state;
 
-        let prompt = "";
+        let prompt = null;
         if (this.state.prompt)
             prompt = <ProfilePrompt promptText={this.state.promptText} type={this.state.type} login={this.props.login}
                                     URI={this.state.URI} token={this.state.token}
                                     resetPrompt={this.resetPrompt}/>;
 
-        let tel = "";
+        let tel = null;
         if (this.props.session.type !== 'admin')
             tel = <tr>
                 <td><FontAwesomeIcon icon={faPhone}/>&emsp;Telephone</td>

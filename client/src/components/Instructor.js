@@ -7,7 +7,7 @@ import {
     Input,
     Button,
     FormGroup,
-    FormText
+    FormText, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Spinner, ListGroup
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -27,6 +27,7 @@ class Instructor extends Component {
             name: "",
             email: "",
             telephone: "",
+            instructors: [],
             alert: false,
             alertText: null
         };
@@ -34,6 +35,12 @@ class Instructor extends Component {
 
     componentDidMount() {
         document.title = "UniHub | Instructor";
+        fetch('/api/instructor')
+            .then(response => response.json())
+            .then(result => {
+                this.setState({instructors: result.instructors})
+            })
+            .catch(err => console.log(err));
     }
 
     resetAlert = () => {
@@ -72,6 +79,12 @@ class Instructor extends Component {
                 data.success
                     ? this.setState({ alert: true, alertText: data.success })
                     : this.setState({ alert: true, alertText: data.msg });
+                fetch('/api/instructor')
+                    .then(response => response.json())
+                    .then(result => {
+                        this.setState({instructors: result.instructors})
+                    })
+                    .catch(err => console.log(err));
                 return data;
             })
             .catch(err => console.error(err));
@@ -85,10 +98,30 @@ class Instructor extends Component {
         if (this.state.alert)
             alert = <Alert alertText={this.state.alertText} resetAlert={this.resetAlert}/>;
 
+        let instructors;
+        if (this.state.instructors.length > 0) {
+            instructors = this.state.instructors.map(instructor =>
+                <ListGroupItem key={instructor._id} className="text-left">
+                    <ListGroupItemHeading>{instructor.name}</ListGroupItemHeading>
+                    <ListGroupItemText className="text-muted mt-2 my-0">Email : {instructor.email}</ListGroupItemText>
+                    <ListGroupItemText className="text-muted my-0">Telephone : {instructor.telephone}</ListGroupItemText>
+                </ListGroupItem>
+            );
+        } else {
+            instructors = <div className="mt-4 text-success">
+                <span style={{fontSize: '2rem'}}>Loading</span>&emsp;
+                <Spinner size="lg"/>
+            </div>;
+        }
+
         return (
             <div className="container-fluid row mx-0">
                 <Col md={6} className="container-fluid text-center">
-
+                    <h1 className="mt-4 mb-4 text-success">Instructors</h1>
+                    <hr/>
+                    <ListGroup>
+                        {instructors}
+                    </ListGroup>
                 </Col>
                 <Col md={6} className="container-fluid text-center">
                     <h1 className="mt-4 mb-4 text-success">Add New Instructor</h1>

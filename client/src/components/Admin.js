@@ -7,7 +7,12 @@ import {
     Input,
     Button,
     FormGroup,
-    FormText
+    FormText,
+    ListGroup,
+    ListGroupItem,
+    ListGroupItemHeading,
+    ListGroupItemText,
+    Spinner
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -25,6 +30,7 @@ class Admin extends Component {
         this.state = {
             name: "",
             email: "",
+            admins: [],
             alert: false,
             alertText: null
         };
@@ -32,6 +38,10 @@ class Admin extends Component {
 
     componentDidMount() {
         document.title = "UniHub | Admin";
+        fetch('/api/admin')
+            .then(response => response.json())
+            .then(result => this.setState({admins: result.admins}))
+            .catch(err => console.log(err));
     }
 
     resetAlert = () => {
@@ -69,9 +79,14 @@ class Admin extends Component {
                 data.success
                     ? this.setState({ alert: true, alertText: data.success })
                     : this.setState({ alert: true, alertText: data.msg });
+                fetch('/api/admin')
+                    .then(response => response.json())
+                    .then(result => this.setState({admins: result.admins}))
+                    .catch(err => console.log(err));
                 return data;
             })
             .catch(err => console.error(err));
+
     };
 
     render() {
@@ -82,10 +97,29 @@ class Admin extends Component {
         if (this.state.alert)
             alert = <Alert alertText={this.state.alertText} resetAlert={this.resetAlert}/>;
 
+        let admins;
+        if (this.state.admins.length > 0) {
+            admins = this.state.admins.map(admin =>
+                <ListGroupItem key={admin._id} className="text-left">
+                    <ListGroupItemHeading>{admin.name}</ListGroupItemHeading>
+                    <ListGroupItemText className="text-muted">{admin.email}</ListGroupItemText>
+                </ListGroupItem>
+            );
+        } else {
+            admins = <div className="mt-4 text-success">
+                <span style={{fontSize: '2rem'}}>Loading</span>&emsp;
+                <Spinner size="lg"/>
+            </div>;
+        }
+
         return (
             <div className="container-fluid row mx-0">
                 <Col md={6} className="container-fluid text-center">
-
+                    <h1 className="mt-4 mb-4 text-success">Admins</h1>
+                    <hr/>
+                    <ListGroup>
+                        {admins}
+                    </ListGroup>
                 </Col>
                 <Col md={6} className="container-fluid text-center">
                     <h1 className="mt-4 mb-4 text-success">Add New Admin</h1>

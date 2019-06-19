@@ -14,11 +14,17 @@ const CourseSchema = mongoose.Schema({
     },
 
     instructor: {
-        type: String
+        type: JSON,
+        required: true
     },
 
     students: {
         type: Array
+    },
+
+    status: {
+        type: String,
+        default: 'pending'
     }
 
 });

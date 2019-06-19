@@ -84,7 +84,7 @@ class StudentController {
                 .then(students =>
                     students.length >= 1
                         ? resolve({ status: 200, students })
-                        : reject({ status: 404, msg: "There are no students." })
+                        : reject({ status: 404, msg: "There are no students.", students })
                 )
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
@@ -160,29 +160,33 @@ class StudentController {
 
                 } else {
 
-                    Student.findById(id)
+                    Student
+                        .findById(id)
                         .exec()
                         .then(student => {
 
-                            bcrypt.compare(currentPassword, student.password)
+                            bcrypt
+                                .compare(currentPassword, student.password)
                                 .then(isMatch => {
                                     if (isMatch) {
 
                                         //Hashing the password before storing in database.
-                                        bcrypt.genSalt(10)
+                                        bcrypt
+                                            .genSalt(10)
                                             .then(salt => {
 
                                                 bcrypt.hash(updUser.password, salt)
                                                     .then(hash => updUser.password = hash)
                                                     .then(() => {
 
-                                                        Student.findByIdAndUpdate(id, updUser, { new: true })
+                                                        Student
+                                                            .findByIdAndUpdate(id, updUser, { new: true })
                                                             .select("-password")
                                                             .exec()
-                                                            .then(student => resolve({
+                                                            .then(user => resolve({
                                                                 status: 200,
                                                                 success: "Student updated successfully.",
-                                                                student
+                                                                user
                                                             }))
                                                             .catch(err => reject({
                                                                 status: 500,
@@ -214,10 +218,11 @@ class StudentController {
 
             } else {
 
-                Student.findByIdAndUpdate(id, updUser, { new: true })
+                Student
+                    .findByIdAndUpdate(id, updUser, { new: true })
                     .select("-password")
                     .exec()
-                    .then(student => resolve({ status: 200, success: "Student updated successfully.", student }))
+                    .then(user => resolve({ status: 200, success: "Student updated successfully.", user }))
                     .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
             }

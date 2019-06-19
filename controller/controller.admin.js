@@ -69,7 +69,7 @@ class AdminController {
                 .then(admins => {
                     admins.length >= 1
                         ? resolve({ status: 200, admins })
-                        : reject({ status: 404, msg: "There are no any admins." });
+                        : reject({ status: 404, msg: "There are no any admins.", admins });
                 })
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
@@ -133,39 +133,39 @@ class AdminController {
 
         return new Promise((resolve, reject) => {
 
-            let updAdmin = new Admin(data);
+            let updAdmin = data;
 
             if (updAdmin.password) {
 
-                if (!updAdmin.currentPassword) {
-
+                const { currentPassword } = updAdmin;
+                if (!currentPassword)
                     return reject({ status: 400, msg: "Please enter current password." });
 
-                } else {
-
-                    bcrypt.genSalt(10)
-                        .then(salt => {
-                            bcrypt.hash(updAdmin.password, salt)
-                                .then(hash => updAdmin.password = hash)
-                                .then(() => {
-                                    Admin.findByIdAndUpdate(id, updAdmin, { new: true })
-                                        .select("-password")
-                                        .exec()
-                                        .then(admin => resolve({ status: 200, msg: "Admin updated.", admin }))
-                                        .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
-                                })
-                                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
-                        })
-                        .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
-
-                }
+                bcrypt
+                    .genSalt(10)
+                    .then(salt => {
+                        bcrypt
+                            .hash(updAdmin.password, salt)
+                            .then(hash => updAdmin.password = hash)
+                            .then(() => {
+                                Admin
+                                    .findByIdAndUpdate(id, updAdmin, { new: true })
+                                    .select("-password")
+                                    .exec()
+                                    .then(user => resolve({ status: 200, success: "Admin updated successfully.", user }))
+                                    .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+                            })
+                            .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+                    })
+                    .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
             } else {
 
-                Admin.findByIdAndUpdate(id, updAdmin, { new: true })
+                Admin
+                    .findByIdAndUpdate(id, updAdmin, { new: true })
                     .select("-password")
                     .exec()
-                    .then(admin => resolve({ status: 200, msg: "Admin updated.", admin }))
+                    .then(user => resolve({ status: 200, success: "Admin updated successfully.", user }))
                     .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
             }

@@ -7,7 +7,7 @@ import {
     Input,
     Button,
     FormGroup,
-    FormText
+    FormText, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Spinner, ListGroup
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -28,6 +28,7 @@ class Course extends Component {
             code: "",
             instructor: "",
             instructors: [],
+            courses: [],
             alert: false,
             alertText: null
         };
@@ -35,14 +36,24 @@ class Course extends Component {
 
     componentDidMount() {
         document.title = "UniHub | Course";
+
         fetch("/api/instructor")
             .then(response => response.json())
             .then(result =>
                 this.setState({ instructors: result.instructors },
                     () =>
-                        this.setState({instructor: this.state.instructors[0]._id})
+                        this.setState({ instructor: this.state.instructors[0]._id })
                 )
             )
+            .catch(err => console.log(err));
+
+        fetch("/api/course")
+            .then(response => response.json())
+            .then(result => {
+                result.courses.length > 0
+                    ? this.setState({ courses: result.courses })
+                    : this.setState({ courses: null });
+            })
             .catch(err => console.log(err));
     }
 
@@ -82,6 +93,14 @@ class Course extends Component {
                 data.success
                     ? this.setState({ alert: true, alertText: data.success })
                     : this.setState({ alert: true, alertText: data.msg });
+                fetch("/api/course")
+                    .then(response => response.json())
+                    .then(result => {
+                        result.courses.length > 0
+                            ? this.setState({ courses: result.courses })
+                            : this.setState({ courses: null });
+                    })
+                    .catch(err => console.log(err));
                 return data;
             })
             .catch(err => console.error(err));
@@ -96,13 +115,49 @@ class Course extends Component {
             alert = <Alert alertText={this.state.alertText} resetAlert={this.resetAlert}/>;
 
         let instructors = this.state.instructors.map(instructor => {
-           return <option key={instructor._id} value={instructor._id}>{instructor.name}</option>
+            return <option key={instructor._id} value={instructor._id}>{instructor.name}</option>;
         });
+
+        let courses;
+        if (this.state.courses === null) {
+            courses = <div className="mt-4 text-success">
+                <span style={{ fontSize: "2rem" }}>No Courses</span>
+            </div>;
+        } else if (this.state.courses.length > 0) {
+            courses = this.state.courses.map(course => {
+
+                let status;
+
+                if (course.status === 'pending')
+                    status = <span className="text-warning">{course.status.toUpperCase()}</span>;
+                else if (course.status === 'accepted')
+                    status = <span className="text-success">{course.status.toUpperCase()}</span>;
+                else
+                    status = <span className="text-danger">{course.status.toUpperCase()}</span>;
+
+                return <ListGroupItem key={course._id} className="text-left">
+                    <ListGroupItemHeading>{course.name}</ListGroupItemHeading>
+                    <ListGroupItemText className="text-muted mt-2 my-0">Code : {course.code}</ListGroupItemText>
+                    <ListGroupItemText className="text-muted my-0">Instructor : {course.instructor.name}</ListGroupItemText>
+                    <ListGroupItemText className="text-muted my-0">Status : {status}</ListGroupItemText>
+                </ListGroupItem>;
+
+            });
+        } else {
+            courses = <div className="mt-4 text-success">
+                <span style={{ fontSize: "2rem" }}>Loading</span>&emsp;
+                <Spinner size="lg"/>
+            </div>;
+        }
 
         return (
             <div className="container-fluid row mx-0">
                 <Col md={6} className="container-fluid text-center">
-
+                    <h1 className="mt-4 mb-4 text-success">Courses</h1>
+                    <hr/>
+                    <ListGroup>
+                        {courses}
+                    </ListGroup>
                 </Col>
                 <Col md={6} className="container-fluid text-center">
                     <h1 className="mt-4 mb-4 text-success">Add New Course</h1>
