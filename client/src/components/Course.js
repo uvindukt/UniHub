@@ -37,10 +37,10 @@ class Course extends Component {
         document.title = "UniHub | Course";
         fetch("/api/instructor")
             .then(response => response.json())
-            .then(instructors =>
-                this.setState({ instructors },
+            .then(result =>
+                this.setState({ instructors: result.instructors },
                     () =>
-                        this.setState({ instructor: instructors[0]._id })
+                        this.setState({instructor: this.state.instructors[0]._id})
                 )
             )
             .catch(err => console.log(err));
@@ -94,6 +94,10 @@ class Course extends Component {
         let alert = "";
         if (this.state.alert)
             alert = <Alert alertText={this.state.alertText} resetAlert={this.resetAlert}/>;
+
+        let instructors = this.state.instructors.map(instructor => {
+           return <option key={instructor._id} value={instructor._id}>{instructor.name}</option>
+        });
 
         return (
             <div className="container-fluid row mx-0">
@@ -166,9 +170,7 @@ class Course extends Component {
                                                 type="select"
                                                 name="instructor"
                                             >
-                                                <option value="hello">Hello</option>
-                                                <option value="asd">asdasd</option>
-                                                <option value="dasds">sddsdbd</option>
+                                                {instructors}
                                             </Input>
                                         </InputGroup>
                                         <FormText className="ml-3">Please select an instructor.</FormText>

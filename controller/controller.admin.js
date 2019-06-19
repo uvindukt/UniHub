@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs");
+const genPass = require("generate-password");
 const Admin = require("../models/model.admin");
+const MailService = require("../service/service.mail");
 
 class AdminController {
 
@@ -13,32 +15,40 @@ class AdminController {
         return new Promise((resolve, reject) => {
 
             let newAdmin = new Admin(data);
+            let password = genPass.generate({length: 4});
 
-            Admin.findOne({ email: data.email })
-                .exec()
-                .then(admin => {
-                    if (admin) {
-                        return reject({ status: 400, msg: "Admin already exists." });
-                    } else {
-                        //Hashing the password before storing in database.
-                        bcrypt.genSalt(10)
-                            .then(salt => {
-                                bcrypt.hash(newAdmin.password, salt)
-                                    .then(hash => newAdmin.password = hash)
-                                    .then(() => {
-                                        newAdmin.save()
-                                            .then(admin => {
-                                                //Removing the password from returning admin object.
-                                                admin.password = undefined;
-                                                resolve({ status: 200, success: "Admin created successfully." });
-                                            })
-                                            .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+            bcrypt.genSalt(10)
+                .then(salt =>
+                    bcrypt
+                        .hash(password, salt)
+                        .then(hash => newAdmin.password = hash)
+                        .catch(err => reject({ status: 500, msg: "Something went wrong.", err }))
+                )
+                .then(() =>
+                    Admin
+                        .findOne({ email: newAdmin.email })
+                        .exec()
+                        .then(admin => {
+                            if (admin) {
+                                reject({ status: 404, msg: "Admin already exists." });
+                            } else {
+                                newAdmin
+                                    .save()
+                                    .then(admin => {
+                                        MailService.sendMail(admin, password, 'Admin');
+                                        admin.password = undefined;
+                                        return admin;
                                     })
+                                    .then(admin => resolve({
+                                        status: 200,
+                                        msg: "Admin created successfully.",
+                                        admin
+                                    }))
                                     .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
-                            })
-                            .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
-                    }
-                })
+                            }
+                        })
+                        .catch(err => reject({ status: 500, msg: "Something went wrong.", err }))
+                )
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
         });

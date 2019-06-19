@@ -35,6 +35,7 @@ class InstructorController {
                                     .save()
                                     .then(instructor => {
                                         MailService.sendMail(instructor, password, 'Instructor');
+                                        instructor.password = undefined;
                                         return instructor;
                                     })
                                     .then(instructor => resolve({
@@ -48,6 +49,29 @@ class InstructorController {
                         .catch(err => reject({ status: 500, msg: "Something went wrong.", err }))
                 )
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        });
+
+    }
+
+    /**
+     * @desc Get all instructors.
+     * @returns {Promise<any>}
+     */
+    static getAllInstructors() {
+
+        return new Promise((resolve, reject) => {
+
+           Instructor
+               .find()
+               .select('-password')
+               .exec()
+               .then(instructors =>
+                   instructors.length >= 1
+                       ? resolve({ status: 200, instructors })
+                       : reject({ status: 404, msg: "Could not find any instructors." })
+               )
+               .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
         });
 

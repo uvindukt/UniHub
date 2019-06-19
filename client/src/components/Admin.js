@@ -13,7 +13,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faEnvelope,
     faUserSecret,
-    faKey,
     faUserPlus
 } from "@fortawesome/free-solid-svg-icons";
 import { Redirect } from "react-router-dom";
@@ -26,8 +25,6 @@ class Admin extends Component {
         this.state = {
             name: "",
             email: "",
-            password: "",
-            confirmPassword: "",
             alert: false,
             alertText: null
         };
@@ -62,9 +59,7 @@ class Admin extends Component {
             },
             body: JSON.stringify({
                 name: this.state.name,
-                email: this.state.email,
-                password: this.state.password,
-                confirmPassword: this.state.confirmPassword
+                email: this.state.email
             })
         };
 
@@ -140,44 +135,6 @@ class Admin extends Component {
                                     </InputGroup>
                                         <FormText className="ml-3">Please enter a valid email address.</FormText>
                                     </FormGroup>
-                                </Col>
-                            </div>
-                            <div className="row container-fluid mr-0 pr-0">
-                                <Col md={6} className="mb-4">
-                                    <InputGroup>
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText className="adTextBox">
-                                                <FontAwesomeIcon icon={faKey}/>
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input
-                                            required
-                                            value={this.state.password}
-                                            onChange={this.handleChange}
-                                            className="textBox"
-                                            type="password"
-                                            name="password"
-                                            placeholder="New Password"
-                                        />
-                                    </InputGroup>
-                                </Col>
-                                <Col md={6} className="mb-4">
-                                    <InputGroup>
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText className="adTextBox">
-                                                <FontAwesomeIcon icon={faKey}/>
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input
-                                            required
-                                            value={this.state.confirmPassword}
-                                            onChange={this.handleChange}
-                                            className="textBox"
-                                            type="password"
-                                            name="confirmPassword"
-                                            placeholder="Confirm Password"
-                                        />
-                                    </InputGroup>
                                 </Col>
                             </div>
                             <div className="row container-fluid mr-0 pr-0">
