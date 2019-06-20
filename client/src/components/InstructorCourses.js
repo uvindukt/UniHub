@@ -17,7 +17,7 @@ class InstructorCourses extends Component {
     }
 
     componentDidMount() {
-        document.title = "UniHub | Course";
+        document.title = "UniHub | Assigned Courses";
 
         fetch(`/api/course/instructor/${this.props.session.user._id}`)
             .then(response => response.json())

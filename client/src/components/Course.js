@@ -7,17 +7,18 @@ import {
     Input,
     Button,
     FormGroup,
-    FormText, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Spinner, ListGroup
+    FormText, Spinner, ListGroup
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faHashtag,
     faBook,
     faUserTie,
-    faFolderPlus
+    faFolderPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { Redirect } from "react-router-dom";
 import Alert from "./Alert";
+import CourseItem from "./CourseItem";
 
 
 class Course extends Component {
@@ -106,6 +107,21 @@ class Course extends Component {
             .catch(err => console.error(err));
     };
 
+    reload = () => {
+
+        this.setState({courses: []}, () =>
+            fetch("/api/course")
+                .then(response => response.json())
+                .then(result => {
+                    result.courses.length > 0
+                        ? this.setState({ courses: result.courses })
+                        : this.setState({ courses: null });
+                })
+                .catch(err => console.log(err))
+        )
+
+    };
+
     render() {
 
         if (!this.props.session.isAuthenticated || this.props.session.type !== "admin") return <Redirect to="/"/>;
@@ -120,34 +136,24 @@ class Course extends Component {
 
         let courses;
         if (this.state.courses === null) {
+
             courses = <div className="mt-4 text-success">
                 <span style={{ fontSize: "2rem" }}>No Courses</span>
             </div>;
+
         } else if (this.state.courses.length > 0) {
-            courses = this.state.courses.map(course => {
 
-                let status;
+            courses = this.state.courses.map(course =>
+                <CourseItem key={course._id} course={course} instructors={this.state.instructors} reload={this.reload}/>
+            );
 
-                if (course.status === 'pending')
-                    status = <span className="text-warning">{course.status.toUpperCase()}</span>;
-                else if (course.status === 'accepted')
-                    status = <span className="text-success">{course.status.toUpperCase()}</span>;
-                else
-                    status = <span className="text-danger">{course.status.toUpperCase()}</span>;
-
-                return <ListGroupItem key={course._id} className="text-left">
-                    <ListGroupItemHeading>{course.name}</ListGroupItemHeading>
-                    <ListGroupItemText className="text-muted mt-2 my-0">Code : {course.code}</ListGroupItemText>
-                    <ListGroupItemText className="text-muted my-0">Instructor : {course.instructor.name}</ListGroupItemText>
-                    <ListGroupItemText className="text-muted my-0">Status : {status}</ListGroupItemText>
-                </ListGroupItem>;
-
-            });
         } else {
+
             courses = <div className="mt-4 text-success">
                 <span style={{ fontSize: "2rem" }}>Loading</span>&emsp;
                 <Spinner size="lg"/>
             </div>;
+
         }
 
         return (

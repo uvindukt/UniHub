@@ -169,4 +169,25 @@ router.post('/', (req, res) => {
 
 });
 
+/**
+ * @desc Change course instructor.
+ * @route PUT /api/course/{id}/instructor
+ * @access Private
+ */
+router.put('/:id/instructor', (req, res) => {
+
+    InstructorController
+        .getInstructorById(req.body.instructor)
+        .then(result => {
+            const { instructor } = result;
+            CourseController
+                .replaceInstructor(req.params.id, instructor)
+                .then(result => res.json(result))
+                .catch(err => res.status(err.status).json(err))
+        })
+        .catch(err => res.status(err.status).json(err))
+
+
+});
+
 module.exports = router;

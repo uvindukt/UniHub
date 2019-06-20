@@ -17,7 +17,7 @@ class StudentCoursesAll extends Component {
     }
 
     componentDidMount() {
-        document.title = "UniHub | Course";
+        document.title = "UniHub | All Courses";
 
         fetch(`/api/course/accepted`)
             .then(response => response.json())

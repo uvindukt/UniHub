@@ -191,7 +191,7 @@ class CourseController {
                 .then(course => course.students.forEach(id => {
                     if (id === studentId) {
                         index = true;
-                        reject({ status: 400, msg: "Already enrolled to course." });
+                        reject({ status: 400, msg: "Already joined to the course." });
                     }
                 }))
                 .then(() => {
@@ -223,10 +223,30 @@ class CourseController {
 
         return new Promise((resolve, reject) => {
 
+            let index = false;
+
             Course
-                .findByIdAndUpdate(courseId, { $pull: { students: studentId } })
-                .exec()
-                .then(course => resolve({ status: 200, msg: `Student removed from ${course.name}.`, course }))
+                .findById(courseId)
+                .then(course => course.students.forEach(id => {
+                    if (id === studentId) {
+                        index = true;
+                    }
+                }))
+                .then(() => {
+                    if (index === true) {
+                        Course
+                            .findByIdAndUpdate(courseId, { $pull: { students: studentId } })
+                            .exec()
+                            .then(course => resolve({
+                                status: 200,
+                                msg: `Student removed from the ${course.name}.`,
+                                course
+                            }))
+                            .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+                    } else {
+                        reject({ status: 400, msg: "Student is not in this course." });
+                    }
+                })
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
         });
@@ -236,15 +256,15 @@ class CourseController {
     /**
      * @desc Replace the instructor of a course.
      * @param courseId
-     * @param instructorId
+     * @param instructor
      * @returns {Promise<any>}
      */
-    static replaceInstructor(courseId, instructorId) {
+    static replaceInstructor(courseId, instructor) {
 
         return new Promise((resolve, reject) => {
 
             Course
-                .findByIdAndUpdate(courseId, { instructor: instructorId })
+                .findByIdAndUpdate(courseId, { instructor: instructor, status: 'pending' })
                 .then(course => resolve({ status: 200, msg: `Instructor added to ${course.name}.`, course }))
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 

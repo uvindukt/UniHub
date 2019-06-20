@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 import { Button, ButtonGroup, Col, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Row } from "reactstrap";
 import Alert from "./Alert";
+import { Link } from "react-router-dom";
 
-class InstructorCourseItem extends Component{
+class InstructorCourseItem extends Component {
 
     constructor(props) {
         super(props);
@@ -16,14 +17,14 @@ class InstructorCourseItem extends Component{
             index: null,
             alert: false,
             alertText: null
-        }
+        };
     }
 
     resetAlert = () => {
         this.setState({
             alert: false,
             alertText: null
-        });
+        }, () => this.props.reload());
     };
 
     handleSubmit = event => {
@@ -37,7 +38,7 @@ class InstructorCourseItem extends Component{
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                status: this.state.status,
+                status: this.state.status
             })
         };
 
@@ -56,9 +57,8 @@ class InstructorCourseItem extends Component{
                             name: result.course.name,
                             code: result.course.code,
                             students: result.course.students,
-                            instructor: result.course.instructor,
+                            instructor: result.course.instructor
                         }))
-                        .then(() => this.props.reload())
                         .catch(err => console.log(err));
                     return data;
                 })
@@ -79,9 +79,8 @@ class InstructorCourseItem extends Component{
                             name: result.course.name,
                             code: result.course.code,
                             students: result.course.students,
-                            instructor: result.course.instructor,
+                            instructor: result.course.instructor
                         }))
-                        .then(() => this.props.reload())
                         .catch(err => console.log(err));
                     return data;
                 })
@@ -97,27 +96,34 @@ class InstructorCourseItem extends Component{
         if (this.state.alert)
             alert = <Alert alertText={this.state.alertText} resetAlert={this.resetAlert}/>;
 
-        let status, buttons;
+        let status, buttons, heading = <ListGroupItemHeading>{this.state.name}</ListGroupItemHeading>;
 
         if (this.state.status === "pending") {
             status = <span className="text-warning">{this.state.status.toUpperCase()}</span>;
             buttons = <form onSubmit={this.handleSubmit}>
                 <ButtonGroup>
-                    <Button type="submit" onClick={() => this.setState({index: true})} className="button">Accept</Button>
-                    <Button type="submit" onClick={() => this.setState({index: false})} className="button">Reject</Button>
+                    <Button type="submit" onClick={() => this.setState({ index: true })}
+                            className="button">Accept</Button>
+                    <Button type="submit" onClick={() => this.setState({ index: false })}
+                            className="button">Reject</Button>
                 </ButtonGroup>
             </form>;
+
         } else if (this.state.status === "accepted") {
             status = <span className="text-success">{this.state.status.toUpperCase()}</span>;
+            heading = <Link to={{ pathname: "/instructor/course", state: { course: this.props.course } }}>
+                <ListGroupItemHeading>{this.state.name}</ListGroupItemHeading>
+            </Link>;
         } else {
             status = <span className="text-danger">{this.state.status.toUpperCase()}</span>;
         }
+
 
         return <React.Fragment>
             <ListGroupItem className="text-left">
                 <Row>
                     <Col md={6}>
-                        <ListGroupItemHeading>{this.state.name}</ListGroupItemHeading>
+                        {heading}
                         <ListGroupItemText className="text-muted mt-2 my-0">Code : {this.state.code}</ListGroupItemText>
                         <ListGroupItemText className="text-muted my-0">Status : {status}</ListGroupItemText>
                         <ListGroupItemText className="text-muted my-0">No. of Students

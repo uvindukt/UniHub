@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faMinusCircle,
 } from "@fortawesome/free-solid-svg-icons";
+import {Link} from "react-router-dom";
 
 class StudentCoursesEnrolledItem extends Component {
 
@@ -82,7 +83,9 @@ class StudentCoursesEnrolledItem extends Component {
             <ListGroupItem className="text-left">
                 <Row>
                     <Col md={6}>
-                        <ListGroupItemHeading>{this.state.name}</ListGroupItemHeading>
+                        <Link to={{pathname: '/student/course', state: {course:this.props.course}}}>
+                            <ListGroupItemHeading>{this.state.name}</ListGroupItemHeading>
+                        </Link>
                         <ListGroupItemText className="text-muted mt-2 my-0">Code : {this.state.code}</ListGroupItemText>
                         <ListGroupItemText className="text-muted my-0">Instructor : {this.state.instructor.name}</ListGroupItemText>
                         <ListGroupItemText className="text-muted my-0">No. of Students
