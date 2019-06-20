@@ -83,7 +83,7 @@ class StudentCoursesEnrolledItem extends Component {
             <ListGroupItem className="text-left">
                 <Row>
                     <Col md={6}>
-                        <Link to={{pathname: '/student/course', state: {course:this.props.course}}}>
+                        <Link to={{pathname: '/student/course', state: {course: this.props.course}}}>
                             <ListGroupItemHeading>{this.state.name}</ListGroupItemHeading>
                         </Link>
                         <ListGroupItemText className="text-muted mt-2 my-0">Code : {this.state.code}</ListGroupItemText>
