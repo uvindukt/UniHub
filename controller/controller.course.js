@@ -64,6 +64,50 @@ class CourseController {
     }
 
     /**
+     * @desc Get joined courses for a student.
+     * @returns {Promise<JSON>}
+     */
+    static getJoinedCourses(studentId) {
+
+        return new Promise((resolve, reject) => {
+
+            Course
+                .find({students: studentId})
+                .exec()
+                .then(courses =>
+                    courses.length >= 1
+                        ? resolve({ status: 200, courses })
+                        : reject({ status: 404, msg: "Could not find any courses.", courses })
+                )
+                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        });
+
+    }
+
+    /**
+     * @desc Get accepted courses.
+     * @returns {Promise<JSON>}
+     */
+    static getAcceptedCourses() {
+
+        return new Promise((resolve, reject) => {
+
+            Course
+                .find({ status: "accepted" })
+                .exec()
+                .then(courses =>
+                    courses.length >= 1
+                        ? resolve({ status: 200, courses })
+                        : reject({ status: 404, msg: "Could not find any courses.", courses })
+                )
+                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        });
+
+    }
+
+    /**
      * @desc Get courses by instructor.
      * @param instructorId
      * @returns {Promise<JSON>}
@@ -73,7 +117,7 @@ class CourseController {
         return new Promise((resolve, reject) => {
 
             Course
-                .find({"instructor._id": mongoose.Types.ObjectId(instructorId)})
+                .find({ "instructor._id": mongoose.Types.ObjectId(instructorId) })
                 .exec()
                 .then(courses =>
                     courses.length >= 1
@@ -140,10 +184,29 @@ class CourseController {
 
         return new Promise((resolve, reject) => {
 
+            let index = false;
+
             Course
-                .findByIdAndUpdate(courseId, { $push: { students: studentId } })
-                .exec()
-                .then(course => resolve({ status: 200, msg: `Student added to the ${course.name}.`, course }))
+                .findById(courseId)
+                .then(course => course.students.forEach(id => {
+                    if (id === studentId) {
+                        index = true;
+                        reject({ status: 400, msg: "Already enrolled to course." });
+                    }
+                }))
+                .then(() => {
+                    if (index === false) {
+                        Course
+                            .findByIdAndUpdate(courseId, { $push: { students: studentId } })
+                            .exec()
+                            .then(course => resolve({
+                                status: 200,
+                                msg: `Student added to the ${course.name}.`,
+                                course
+                            }))
+                            .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+                    }
+                })
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
         });
@@ -199,9 +262,13 @@ class CourseController {
         return new Promise((resolve, reject) => {
 
             Course
-                .findByIdAndUpdate(id, {status: 'accepted'}, {new: true})
+                .findByIdAndUpdate(id, { status: "accepted" }, { new: true })
                 .exec()
-                .then(course => resolve({ status: 200, msg: `${course.instructor.name} accepted ${course.name}.`, course }))
+                .then(course => resolve({
+                    status: 200,
+                    msg: `${course.instructor.name} accepted ${course.name}.`,
+                    course
+                }))
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
         });
@@ -218,9 +285,13 @@ class CourseController {
         return new Promise((resolve, reject) => {
 
             Course
-                .findByIdAndUpdate(id, {status: 'rejected'}, {new: true})
+                .findByIdAndUpdate(id, { status: "rejected" }, { new: true })
                 .exec()
-                .then(course => resolve({ status: 200, msg: `${course.instructor.name} rejected ${course.name}.`, course }))
+                .then(course => resolve({
+                    status: 200,
+                    msg: `${course.instructor.name} rejected ${course.name}.`,
+                    course
+                }))
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
         });

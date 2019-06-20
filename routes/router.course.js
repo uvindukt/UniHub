@@ -18,6 +18,36 @@ router.get('/', (req, res) => {
 });
 
 /**
+ * @desc Retrieve joined courses for a student.
+ * @route GET /api/course/joined/{studentId}
+ * @access Private
+ */
+router.get('/joined/:studentId', (req, res) => {
+
+    const { studentId } = req.params;
+
+    CourseController
+        .getJoinedCourses(studentId)
+        .then(result => res.json(result))
+        .catch(err => res.status(err.status).json(err));
+
+});
+
+/**
+ * @desc Retrieve accepted courses.
+ * @route GET /api/course/accepted
+ * @access Private
+ */
+router.get('/accepted', (req, res) => {
+
+    CourseController
+        .getAcceptedCourses()
+        .then(result => res.json(result))
+        .catch(err => res.status(err.status).json(err));
+
+});
+
+/**
  * @desc Retrieve courses from given instructor ID.
  * @route GET /api/course/instructor/{instructorId}
  * @access Private
@@ -82,6 +112,38 @@ router.put('/reject/:id', (req, res) => {
 
     CourseController
         .rejectCourse(req.params.id)
+        .then(result => res.json(result))
+        .catch(err => res.status(err.status).json(err))
+
+});
+
+/**
+ * @desc Add a student to the course.
+ * @route PUT /api/course/{courseId}/student/{studentId}/join
+ * @access Private
+ */
+router.put('/:courseId/student/:studentId/join', (req, res) => {
+
+    const { courseId, studentId } = req.params;
+
+    CourseController
+        .addStudent(courseId, studentId)
+        .then(result => res.json(result))
+        .catch(err => res.status(err.status).json(err))
+
+});
+
+/**
+ * @desc Remove a student from the course.
+ * @route PUT /api/course/{courseId}/student/{studentId}/join
+ * @access Private
+ */
+router.put('/:courseId/student/:studentId/leave', (req, res) => {
+
+    const { courseId, studentId } = req.params;
+
+    CourseController
+        .removeStudent(courseId, studentId)
         .then(result => res.json(result))
         .catch(err => res.status(err.status).json(err))
 

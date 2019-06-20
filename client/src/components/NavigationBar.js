@@ -21,7 +21,8 @@ import {
     faUserTie,
     faUserSecret,
     faBook,
-    faBell
+    faBell,
+    faStream
 } from "@fortawesome/free-solid-svg-icons";
 
 class NavigationBar extends Component {
@@ -170,13 +171,40 @@ class NavigationBar extends Component {
                         Options
                     </DropdownToggle>
                     <DropdownMenu right>
-                        <DropdownItem>Courses</DropdownItem>
-                        <DropdownItem>Notifications</DropdownItem>
+                        <DropdownItem>
+                            <Link exact to="/student/courses/enrolled" className="navbar-brand">
+                                <span style={{color: '#5cb85c', fontSize: 'large'}}>
+                                <FontAwesomeIcon
+                                    icon={faBook}
+                                />
+                                    &ensp;Enrolled Courses
+                                </span>
+                            </Link>
+                        </DropdownItem>
+                        <DropdownItem>
+                            <Link exact to="/student/courses/all" className="navbar-brand">
+                                <span style={{color: '#5cb85c', fontSize: 'large'}}>
+                                <FontAwesomeIcon
+                                    icon={faStream}
+                                />
+                                    &ensp;All Courses
+                                </span>
+                            </Link>
+                        </DropdownItem>
+                        <DropdownItem divider/>
+                        <DropdownItem>
+                            <Link exact to="/student/notifications" className="navbar-brand">
+                                <span style={{color: '#428bca', fontSize: 'large'}}>
+                                <FontAwesomeIcon
+                                    icon={faBell}
+                                />
+                                    &ensp;Notifications
+                                </span>
+                            </Link>
+                        </DropdownItem>
                     </DropdownMenu>
                 </UncontrolledDropdown>);
             }
-
-
         }
 
         return (

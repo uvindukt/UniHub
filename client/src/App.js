@@ -10,6 +10,8 @@ import Admin from "./components/Admin";
 import Course from "./components/Course";
 import Instructor from "./components/Instructor";
 import InstructorCourses from "./components/InstructorCourses";
+import StudentCoursesAll from "./components/StudentCoursesAll";
+import StudentCoursesEnrolled from "./components/StudentCoursesEnrolled";
 import NotFound from "./components/NotFound";
 import { bake_cookie, read_cookie, delete_cookie } from "sfcookies";
 
@@ -84,6 +86,12 @@ class App extends Component {
                         )}/>
                         <Route exact path="/instructor" render={props => (
                             <Instructor {...props} session={this.state} login={this.login}/>
+                        )}/>
+                        <Route exact path="/student/courses/all" render={props => (
+                            <StudentCoursesAll {...props} session={this.state} login={this.login}/>
+                        )}/>
+                        <Route exact path="/student/courses/enrolled" render={props => (
+                            <StudentCoursesEnrolled {...props} session={this.state} login={this.login}/>
                         )}/>
                         <Route component={NotFound}/>
                     </Switch>
