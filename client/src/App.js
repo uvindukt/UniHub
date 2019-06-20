@@ -9,6 +9,7 @@ import Profile from "./components/Profile";
 import Admin from "./components/Admin";
 import Course from "./components/Course";
 import Instructor from "./components/Instructor";
+import InstructorCourses from "./components/InstructorCourses";
 import NotFound from "./components/NotFound";
 import { bake_cookie, read_cookie, delete_cookie } from "sfcookies";
 
@@ -63,22 +64,25 @@ class App extends Component {
                     <NavigationBar session={this.state} logout={this.logout}/>
                     <Switch>
                         <Route exact path="/" component={Home}/>
-                        <Route path="/register" render={props => (
+                        <Route exact path="/register" render={props => (
                             <SignUp {...props} session={this.state} login={this.login}/>
                         )}/>
-                        <Route path="/login" render={props => (
+                        <Route exact path="/login" render={props => (
                             <SignIn {...props} session={this.state} login={this.login}/>
                         )}/>
-                        <Route path="/profile" render={props => (
+                        <Route exact path="/profile" render={props => (
                             <Profile {...props} session={this.state} login={this.login}/>
                         )}/>
-                        <Route path="/admin" render={props => (
+                        <Route exact path="/admin" render={props => (
                             <Admin {...props} session={this.state} login={this.login}/>
                         )}/>
-                        <Route path="/course" render={props => (
+                        <Route exact path="/course" render={props => (
                             <Course {...props} session={this.state} login={this.login}/>
                         )}/>
-                        <Route path="/instructor" render={props => (
+                        <Route exact path="/instructor/courses" render={props => (
+                            <InstructorCourses {...props} session={this.state} login={this.login}/>
+                        )}/>
+                        <Route exact path="/instructor" render={props => (
                             <Instructor {...props} session={this.state} login={this.login}/>
                         )}/>
                         <Route component={NotFound}/>

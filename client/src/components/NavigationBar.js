@@ -20,7 +20,8 @@ import {
     faUserGraduate,
     faUserTie,
     faUserSecret,
-    faBook
+    faBook,
+    faBell
 } from "@fortawesome/free-solid-svg-icons";
 
 class NavigationBar extends Component {
@@ -140,8 +141,27 @@ class NavigationBar extends Component {
                         Options
                     </DropdownToggle>
                     <DropdownMenu right>
-                        <DropdownItem>Courses</DropdownItem>
-                        <DropdownItem>Notifications</DropdownItem>
+                        <DropdownItem>
+                            <Link exact to="/instructor/courses" className="navbar-brand">
+                                <span style={{color: '#5cb85c', fontSize: 'large'}}>
+                                <FontAwesomeIcon
+                                    icon={faBook}
+                                />
+                                    &ensp;Courses
+                                </span>
+                            </Link>
+                        </DropdownItem>
+                        <DropdownItem divider/>
+                        <DropdownItem>
+                            <Link exact to="/instructor/notifications" className="navbar-brand">
+                                <span style={{color: '#428bca', fontSize: 'large'}}>
+                                <FontAwesomeIcon
+                                    icon={faBell}
+                                />
+                                    &ensp;Notifications
+                                </span>
+                            </Link>
+                        </DropdownItem>
                     </DropdownMenu>
                 </UncontrolledDropdown>);
             } else {

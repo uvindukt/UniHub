@@ -1,5 +1,6 @@
 const Course = require("../models/model.course");
 const MailService = require("../service/service.mail");
+const mongoose = require("mongoose");
 
 class CourseController {
 
@@ -17,11 +18,11 @@ class CourseController {
             newCourse.instructor = instructor;
 
             Course
-                .findOne({code: data.code})
+                .findOne({ code: data.code })
                 .exec()
                 .then(course => {
                     if (course) {
-                        reject({ status: 400, msg: "Course already exists."})
+                        reject({ status: 400, msg: "Course already exists." });
                     } else {
                         newCourse
                             .save()
@@ -50,6 +51,29 @@ class CourseController {
 
             Course
                 .find()
+                .exec()
+                .then(courses =>
+                    courses.length >= 1
+                        ? resolve({ status: 200, courses })
+                        : reject({ status: 404, msg: "Could not find any courses.", courses })
+                )
+                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        });
+
+    }
+
+    /**
+     * @desc Get courses by instructor.
+     * @param instructorId
+     * @returns {Promise<JSON>}
+     */
+    static getCoursesByInstructor(instructorId) {
+
+        return new Promise((resolve, reject) => {
+
+            Course
+                .find({"instructor._id": mongoose.Types.ObjectId(instructorId)})
                 .exec()
                 .then(courses =>
                     courses.length >= 1
@@ -147,12 +171,12 @@ class CourseController {
     }
 
     /**
-     * @desc Assign a instructor to the course.
+     * @desc Replace the instructor of a course.
      * @param courseId
      * @param instructorId
      * @returns {Promise<any>}
      */
-    static addInstructor(courseId, instructorId) {
+    static replaceInstructor(courseId, instructorId) {
 
         return new Promise((resolve, reject) => {
 
@@ -166,17 +190,37 @@ class CourseController {
     }
 
     /**
-     * @desc Remove the instructor from the course.
-     * @param courseId
-     * @returns {Promise<any>}
+     * @desc Accept the course by assigned instructor.
+     * @param id
+     * @returns {Promise<JSON>}
      */
-    static removeInstructor(courseId) {
+    static acceptCourse(id) {
 
         return new Promise((resolve, reject) => {
 
             Course
-                .findByIdAndUpdate(courseId, { $unset: "instructor" })
-                .then(course => resolve({ status: 200, msg: `Instructor removed from ${course.name}.`, course }))
+                .findByIdAndUpdate(id, {status: 'accepted'}, {new: true})
+                .exec()
+                .then(course => resolve({ status: 200, msg: `${course.instructor.name} accepted ${course.name}.`, course }))
+                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        });
+
+    }
+
+    /**
+     * @desc Reject the course by assigned instructor.
+     * @param id
+     * @returns {Promise<JSON>}
+     */
+    static rejectCourse(id) {
+
+        return new Promise((resolve, reject) => {
+
+            Course
+                .findByIdAndUpdate(id, {status: 'rejected'}, {new: true})
+                .exec()
+                .then(course => resolve({ status: 200, msg: `${course.instructor.name} rejected ${course.name}.`, course }))
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
         });
