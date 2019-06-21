@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import {
     Col,
     Button,
-    Table
+    Row,
+    ListGroup,
+    ListGroupItem,
+    ListGroupItemHeading,
+    ListGroupItemText
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -78,13 +82,22 @@ class Profile extends Component {
                                     resetPrompt={this.resetPrompt}/>;
 
         let tel = null;
-        if (this.props.session.type !== 'admin')
-            tel = <tr>
-                <td><FontAwesomeIcon icon={faPhone}/>&emsp;Telephone</td>
-                <td>{telephone}</td>
-                <td><Button onClick={() => this.renderPrompt(promptTelephone)}
-                            className="button m-0 py-1"><FontAwesomeIcon icon={faEdit}/></Button></td>
-            </tr>;
+        if (this.props.session.type !== "admin")
+            tel = <ListGroupItem className="text-left">
+                <Row>
+                    <Col md={6}>
+                        <ListGroupItemHeading><FontAwesomeIcon
+                            icon={faPhone}/>&emsp;Telephone</ListGroupItemHeading>
+                        <ListGroupItemText className="text-muted mt-2 my-0">{telephone}</ListGroupItemText>
+                    </Col>
+                    <Col md={6} className="text-right">
+                        <Button
+                            onClick={() => this.renderPrompt(promptTelephone)}
+                            className="button m-0 mt-2 py-1"><FontAwesomeIcon
+                            icon={faEdit}/></Button>
+                    </Col>
+                </Row>
+            </ListGroupItem>;
 
         return (
             <div className="container-fluid row mx-0 text-center">
@@ -92,34 +105,53 @@ class Profile extends Component {
                 <Col md={8}>
                     <h1 className="mt-4 mb-4 text-success"><FontAwesomeIcon icon={faUserEdit}/>&ensp;Profile</h1>
                     <hr className="mb-4"/>
-                    <Table responsive className="text-left profileTable">
-                        <tbody>
-                        <tr>
-                            <td><FontAwesomeIcon icon={faUser}/>&emsp;Name
-                            </td>
-                            <td>{name}</td>
-                            <td><Button
-                                onClick={() => this.renderPrompt(promptName)}
-                                className="button m-0 py-1"><FontAwesomeIcon
-                                icon={faEdit}/></Button></td>
-                        </tr>
-                        <tr>
-                            <td><FontAwesomeIcon icon={faEnvelope}/>&emsp;E-Mail</td>
-                            <td>{email}</td>
-                            <td><Button onClick={() => this.renderPrompt(promptEmail)}
-                                        className="button m-0 py-1"><FontAwesomeIcon icon={faEdit}/></Button></td>
-                        </tr>
+                    <ListGroup>
+                        <ListGroupItem className="text-left">
+                            <Row>
+                                <Col md={6}>
+                                    <ListGroupItemHeading><FontAwesomeIcon
+                                        icon={faUser}/>&emsp;Name</ListGroupItemHeading>
+                                    <ListGroupItemText className="text-muted mt-2 my-0">{name}</ListGroupItemText>
+                                </Col>
+                                <Col md={6} className="text-right">
+                                    <Button
+                                        onClick={() => this.renderPrompt(promptName)}
+                                        className="button m-0 mt-2 py-1"><FontAwesomeIcon
+                                        icon={faEdit}/></Button>
+                                </Col>
+                            </Row>
+                        </ListGroupItem>
+                        <ListGroupItem className="text-left">
+                            <Row>
+                                <Col md={6}>
+                                    <ListGroupItemHeading><FontAwesomeIcon
+                                        icon={faEnvelope}/>&emsp;E-Mail</ListGroupItemHeading>
+                                    <ListGroupItemText className="text-muted mt-2 my-0">{email}</ListGroupItemText>
+                                </Col>
+                                <Col md={6} className="text-right">
+                                    <Button
+                                        onClick={() => this.renderPrompt(promptEmail)}
+                                        className="button m-0 mt-2 py-1"><FontAwesomeIcon
+                                        icon={faEdit}/></Button>
+                                </Col>
+                            </Row>
+                        </ListGroupItem>
                         {tel}
-                        <tr>
-                            <td><FontAwesomeIcon icon={faKey}/>&emsp;Password
-                            </td>
-                            <td>&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</td>
-                            <td><Button
-                                onClick={() => this.renderPrompt(promptPassword)}
-                                className="button m-0 py-1"><FontAwesomeIcon icon={faEdit}/></Button></td>
-                        </tr>
-                        </tbody>
-                    </Table>
+                        <ListGroupItem className="text-left">
+                            <Row>
+                                <Col md={6}>
+                                    <ListGroupItemHeading><FontAwesomeIcon icon={faKey}/>&emsp;Password</ListGroupItemHeading>
+                                    <ListGroupItemText className="text-muted mt-2 my-0">&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;</ListGroupItemText>
+                                </Col>
+                                <Col md={6} className="text-right">
+                                    <Button
+                                        onClick={() => this.renderPrompt(promptPassword)}
+                                        className="button m-0 mt-2 py-1"><FontAwesomeIcon
+                                        icon={faEdit}/></Button>
+                                </Col>
+                            </Row>
+                        </ListGroupItem>
+                    </ListGroup>
                 </Col>
                 <Col md={2}/>
                 {prompt}

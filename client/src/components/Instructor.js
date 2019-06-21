@@ -64,7 +64,9 @@ class Instructor extends Component {
             method: "POST",
             headers: {
                 "Accept": "application/json, text/plain, */*",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "x-authorize-token": this.props.session.token,
+                "x-authorize-type": this.props.session.type
             },
             body: JSON.stringify({
                 name: this.state.name,

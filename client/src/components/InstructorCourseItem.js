@@ -35,7 +35,9 @@ class InstructorCourseItem extends Component {
             method: "PUT",
             headers: {
                 "Accept": "application/json, text/plain, */*",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "x-authorize-token": this.props.session.token,
+                "x-authorize-type": this.props.session.type
             },
             body: JSON.stringify({
                 status: this.state.status
@@ -101,7 +103,7 @@ class InstructorCourseItem extends Component {
         if (this.state.status === "pending") {
             status = <span className="text-warning">{this.state.status.toUpperCase()}</span>;
             buttons = <form onSubmit={this.handleSubmit}>
-                <ButtonGroup>
+                <ButtonGroup className="mt-3">
                     <Button type="submit" onClick={() => this.setState({ index: true })}
                             className="button">Accept</Button>
                     <Button type="submit" onClick={() => this.setState({ index: false })}

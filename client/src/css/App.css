@@ -30,7 +30,7 @@ body {
 }
 
 .select:focus {
-    box-shadow: 0 0.4629629629629629rem 0.5208333333333334rem 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.3rem 0.3rem 0 rgba(0, 0, 0, 0.3);
 }
 
 .select:focus:hover {
@@ -74,7 +74,7 @@ body {
 }
 
 .textBox:focus {
-    box-shadow: 0 0.4629629629629629rem 0.5208333333333334rem 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.3rem 0.3rem 0 rgba(0, 0, 0, 0.3);
 }
 
 .textBox:focus:hover {
@@ -87,7 +87,7 @@ body {
 
 .button {
     background-color: transparent;
-    box-shadow: 0 0.4629629629629629rem 0.5208333333333334rem 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.3rem 0.3rem 0 rgba(0, 0, 0, 0.3);
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     margin: 1rem 0.5rem;
@@ -100,7 +100,7 @@ body {
 }
 
 .button:focus {
-    box-shadow: 0 0.4629629629629629rem 0.5208333333333334rem 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.3rem 0.3rem 0 rgba(0, 0, 0, 0.3);
 }
 
 .button:hover {
@@ -120,12 +120,12 @@ body {
 }
 
 .navBar {
-    box-shadow: 0 0.4629629629629629rem 0.5208333333333334rem 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.3rem 0.3rem 0 rgba(0, 0, 0, 0.3);
 }
 
 .loginCard {
     border-radius: 1rem;
-    box-shadow: 0 0.4629629629629629rem 0.5208333333333334rem 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0.3rem 0.3rem 0 rgba(0, 0, 0, 0.3);
 }
 
 .modalAlert {

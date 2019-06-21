@@ -63,7 +63,7 @@ class InstructorCourses extends Component {
                 <span style={{ fontSize: "2rem" }}>No Courses</span>
             </div>;
         } else if (this.state.courses.length > 0) {
-            courses = this.state.courses.map(course => <InstructorCourseItem key={course._id} reload={this.reload} course={course}/>);
+            courses = this.state.courses.map(course => <InstructorCourseItem key={course._id} session={this.props.session} reload={this.reload} course={course}/>);
         } else {
             courses = <div className="mt-4 text-success">
                 <span style={{ fontSize: "2rem" }}>Loading</span>&emsp;

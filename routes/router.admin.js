@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
 });
 
 /**
- * @route GET api/admin
+ * @route GET api/admin/{email}
  * @desc Retrieve an admin from given email.
  * @access Public.
  */
@@ -34,7 +34,7 @@ router.get("/:email", (req, res) => {
 });
 
 /**
- * @route GET api/admin
+ * @route GET api/admin/{id}
  * @desc Retrieve an admin from given ID.
  * @access Public.
  */
@@ -62,7 +62,7 @@ router.post('/', authAdmin, validation, (req, res) => {
 });
 
 /**
- * @route PUT api/admin
+ * @route PUT api/admin/{id}
  * @desc Update an admin from given ID.
  * @access Private.
  */
@@ -76,7 +76,7 @@ router.put('/:id', authAdmin, validation, (req, res) => {
 });
 
 /**
- * @route DELETE api/admin
+ * @route DELETE api/admin/{id}
  * @desc Delete an admin from given ID.
  * @access Public.
  */

@@ -38,7 +38,9 @@ class StudentCourseAllItem extends Component {
             method: "PUT",
             headers: {
                 "Accept": "application/json, text/plain, */*",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "x-authorize-token": this.props.session.token,
+                "x-authorize-type": this.props.session.type
             }
         };
 
@@ -75,7 +77,7 @@ class StudentCourseAllItem extends Component {
         let button;
 
         button = <form onSubmit={this.handleSubmit}>
-            <Button type="submit" className="button"><FontAwesomeIcon icon={faPlusCircle}/>&ensp;Join</Button>
+            <Button type="submit" className="button mt-4"><FontAwesomeIcon icon={faPlusCircle}/>&ensp;Join</Button>
         </form>;
 
         return <React.Fragment>

@@ -21,11 +21,17 @@ class CourseItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            instructor: this.props.instructors[0],
-            instructors: this.props.instructors,
+            instructor: "",
+            instructors: [],
             alert: false,
             alertText: null
         };
+    }
+
+    componentDidMount() {
+        this.setState({
+            instructors: this.props.instructors
+        }, () => this.setState({ instructor: this.state.instructors[0] }));
     }
 
     resetAlert = () => {
@@ -49,7 +55,9 @@ class CourseItem extends Component {
             method: "PUT",
             headers: {
                 "Accept": "application/json, text/plain, */*",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "x-authorize-token": this.props.session.token,
+                "x-authorize-type": this.props.session.type
             },
             body: JSON.stringify({
                 instructor: this.state.instructor
@@ -129,7 +137,8 @@ class CourseItem extends Component {
             <Row>
                 <Col md={5}>
                     <ListGroupItemHeading>{this.props.course.name}</ListGroupItemHeading>
-                    <ListGroupItemText className="text-muted mt-2 my-0">Code : {this.props.course.code}</ListGroupItemText>
+                    <ListGroupItemText className="text-muted mt-2 my-0">Code
+                        : {this.props.course.code}</ListGroupItemText>
                     <ListGroupItemText className="text-muted my-0">Instructor
                         : {this.props.course.instructor.name}</ListGroupItemText>
                     <ListGroupItemText className="text-muted my-0">Status : {status}</ListGroupItemText>

@@ -79,7 +79,9 @@ class Course extends Component {
             method: "POST",
             headers: {
                 "Accept": "application/json, text/plain, */*",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "x-authorize-token": this.props.session.token,
+                "x-authorize-type": this.props.session.type
             },
             body: JSON.stringify({
                 name: this.state.name,
@@ -144,7 +146,7 @@ class Course extends Component {
         } else if (this.state.courses.length > 0) {
 
             courses = this.state.courses.map(course =>
-                <CourseItem key={course._id} course={course} instructors={this.state.instructors} reload={this.reload}/>
+                <CourseItem key={course._id} course={course} session={this.props.session} instructors={this.state.instructors} reload={this.reload}/>
             );
 
         } else {
