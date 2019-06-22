@@ -16,13 +16,19 @@ router.post("/", (req, res) => {
     const { files } = req;
 
     if (files === null) {
-        return res.status(400).json({ msg: "No file uploaded" });
-    }
 
-    AssignmentController
-        .createAssignment(files.file, req.body)
-        .then(result => res.json(result))
-        .catch(err => res.status(err.status).json(err));
+        return res.status(400).json({ msg: "No file uploaded" });
+
+    } else {
+
+        files.file.name = Date.now() + files.file.name;
+
+        AssignmentController
+            .createAssignment(files.file, req.body)
+            .then(result => res.json(result))
+            .catch(err => res.status(err.status).json(err));
+
+    }
 
 });
 
@@ -35,6 +41,20 @@ router.get("/course/:id", (req, res) => {
 
     AssignmentController
         .getAssignments(req.params.id)
+        .then(result => res.json(result))
+        .catch(err => res.status(err.status).json(err));
+
+});
+
+/**
+ * @route PUT api/assignment/{id}
+ * @desc Change deadline.
+ * @access Public.
+ */
+router.put("/:id", (req, res) => {
+
+    AssignmentController
+        .changeDeadline(req.params.id, req.body.deadline, req.body.currentDeadline)
         .then(result => res.json(result))
         .catch(err => res.status(err.status).json(err));
 

@@ -21,6 +21,10 @@ class InstructorCourse extends Component {
         document.title = `UniHub | ${this.state.course.name}`;
     }
 
+    reload = () => {
+      this.forceUpdate();
+    };
+
     resetAlert = () => {
         this.setState({
             alert: false,
@@ -51,7 +55,7 @@ class InstructorCourse extends Component {
                         <InstructorAssignments course={this.state.course}/>
                     </Col>
                     <Col md={6}>
-                        <AddAssignment course={this.state.course}/>
+                        <AddAssignment reload={this.reload} course={this.state.course}/>
                     </Col>
                 </Row>
                 {alert}

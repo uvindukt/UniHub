@@ -4,7 +4,7 @@ import axios from 'axios';
 import Alert from './Alert';
 import { Col, FormGroup, FormText, Input, InputGroup, InputGroupAddon, InputGroupText } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileAlt, faCalendarDay } from "@fortawesome/free-solid-svg-icons";
+import { faFileAlt, faCalendarDay, faFileUpload } from "@fortawesome/free-solid-svg-icons";
 
 class AddAssignment extends Component{
 
@@ -32,7 +32,10 @@ class AddAssignment extends Component{
         this.setState({
             alert: false,
             alertText: null
-        }, () => this.setState({uploadPercentage: 0}));
+        }, () => {
+            this.setState({uploadPercentage: 0});
+            this.props.reload();
+        });
     };
 
     handleChange = event => {
@@ -140,7 +143,7 @@ class AddAssignment extends Component{
                                                 value={this.state.deadline}
                                                 onChange={this.handleChange}
                                                 className="select"
-                                                type="datetime-local"
+                                                type="date"
                                                 name="deadline"
                                                 placeholder="Deadline"
                                             />
@@ -165,11 +168,10 @@ class AddAssignment extends Component{
                                     <Progress percentage={this.state.uploadPercentage} />
 
                                     <div className="text-right">
-                                        <input
+                                        <button
                                             type='submit'
-                                            value='Upload'
                                             className='button'
-                                        />
+                                        ><FontAwesomeIcon icon={faFileUpload}/>&ensp;Upload</button>
                                     </div>
                             </div>
                         </div>

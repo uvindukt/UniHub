@@ -18,7 +18,13 @@ class AssignmentController {
 
             newAssignment.attachment = GCSService.getPublicUrl(bucketName, file.name);
 
-            let deadline = new Date(data.deadline);
+            let deadline;
+
+            try {
+                deadline = new Date(data.deadline);
+            } catch (err) {
+                reject({ status: 500, msg: "Something went wrong.", err });
+            }
 
             if (deadline <= Date.now()) {
 
@@ -35,7 +41,7 @@ class AssignmentController {
                             })
                             .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
                     })
-                    .catch(err => reject({ status: 500, msg: "Something wrong.", err }));
+                    .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
             }
 
@@ -53,7 +59,7 @@ class AssignmentController {
         return new Promise((resolve, reject) => {
 
             Assignment
-                .find({course: courseId})
+                .find({ course: courseId })
                 .exec()
                 .then(assignments => {
                     assignments.length >= 1
@@ -61,6 +67,48 @@ class AssignmentController {
                         : reject({ status: 404, msg: "There are no any assignments.", assignments });
                 })
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        });
+
+    }
+
+    /**
+     * @desc Change deadline.
+     * @param id
+     * @param deadline
+     * @param currentDeadline
+     * @returns {Promise<JSON>}
+     */
+    static changeDeadline(id, deadline, currentDeadline) {
+
+        return new Promise((resolve, reject) => {
+
+            let deadlineDate, currentDeadlineDate;
+
+            try {
+
+                deadlineDate = new Date(deadline);
+                currentDeadlineDate = new Date(currentDeadline);
+
+            } catch (err) {
+
+                reject({ status: 500, msg: "Something went wrong.", err });
+
+            }
+
+            if (deadlineDate <= currentDeadlineDate) {
+
+                reject({ status: 400, msg: "Please select a date and time further than the current deadline." });
+
+            } else {
+
+                Assignment
+                    .findByIdAndUpdate(id, { deadline }, { new: true })
+                    .exec()
+                    .then(assignment => resolve({ status: 200, success: "Deadline updated.", assignment }))
+                    .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+            }
 
         });
 

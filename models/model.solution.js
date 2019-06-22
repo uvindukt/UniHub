@@ -1,23 +1,24 @@
 const mongoose = require('mongoose');
 
-const AssignmentSchema = mongoose.Schema({
+const SolutionSchema = mongoose.Schema({
 
-    name: {
+    student: {
         type: String,
         required: true
     },
+
 
     course: {
         type: String,
         required: true
     },
 
-    addedDate: {
+    submitDate: {
         type: String,
         default: Date.now()
     },
 
-    deadline: {
+    assignment: {
         type: String,
         required: true
     },
@@ -29,4 +30,4 @@ const AssignmentSchema = mongoose.Schema({
 
 });
 
-module.exports = mongoose.model('assignment', AssignmentSchema);
+module.exports = mongoose.model('solution', SolutionSchema);
