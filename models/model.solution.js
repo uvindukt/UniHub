@@ -7,7 +7,6 @@ const SolutionSchema = mongoose.Schema({
         required: true
     },
 
-
     course: {
         type: String,
         required: true

@@ -63,7 +63,7 @@ class Assignment extends Component {
         } else if (this.state.solutions.length > 0) {
 
             solutions = this.state.solutions.map(solution =>
-                <AssignmentItem key={solution._id} reload={this.reload} solution={solution}/>
+                <AssignmentItem key={solution._id} reload={this.reload} solution={solution} session={this.props.session}/>
             );
 
         } else {

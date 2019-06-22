@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import {
     ListGroupItem,
     ListGroupItemHeading,
-    ListGroupItemText,
+    ListGroupItemText
 } from "reactstrap";
 import Alert from "./Alert";
 import { Link } from "react-router-dom";
@@ -12,6 +12,7 @@ class AssignmentItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            student: {},
             solution: this.props.solution,
             alert: false,
             alertText: null
@@ -19,7 +20,10 @@ class AssignmentItem extends Component {
     }
 
     componentDidMount() {
-
+        fetch(`/api/student/${this.state.solution.student}`)
+            .then(response => response.json())
+            .then(result => this.setState({student: result.student}))
+            .catch(err => console.log(err))
     }
 
     resetAlert = () => {
@@ -35,19 +39,34 @@ class AssignmentItem extends Component {
         if (this.state.alert)
             alert = <Alert alertText={this.state.alertText} resetAlert={this.resetAlert}/>;
 
-        let solution;
-        if (this.state.solution != null) {
-            solution = <React.Fragment>
-                <ListGroupItem className="text-left">
-                    <ListGroupItemHeading>Solution</ListGroupItemHeading>
-                    <ListGroupItemText
-                        className="text-muted mt-2 my-0">Submitted: {this.state.solution.submitDate}</ListGroupItemText>
-                    <ListGroupItemText className="text-muted mt-2 my-0">
-                        <Link to={{ pathname: this.state.solution.attachment }} target="_blank">Download</Link>
-                    </ListGroupItemText>
-                </ListGroupItem>
+        let marks;
+        if (!this.state.solution.marks) {
+            marks = <React.Fragment>
+                <ListGroupItemText
+                    className="text-muted mt-2 my-0">Not graded yet.</ListGroupItemText>
+            </React.Fragment>;
+        } else {
+            marks = <React.Fragment>
+                <ListGroupItemText
+                    className="text-muted mt-2 my-0">Marks: {this.state.solution.marks}</ListGroupItemText>
             </React.Fragment>;
         }
+
+        let solution;
+        solution = <React.Fragment>
+            <ListGroupItem className="text-left">
+                <ListGroupItemHeading>{this.state.student.name}</ListGroupItemHeading>
+                <ListGroupItemText
+                    className="text-muted mt-2 my-0">{this.state.student.email}</ListGroupItemText>
+                <hr/>
+                <ListGroupItemText
+                    className="text-muted mt-2 my-0">Submitted: {this.state.solution.submitDate}</ListGroupItemText>
+                {marks}
+                <ListGroupItemText className="text-muted mt-2 my-0">
+                    <Link to={{ pathname: this.state.solution.attachment }} target="_blank">Download</Link>
+                </ListGroupItemText>
+            </ListGroupItem>
+        </React.Fragment>;
 
 
         return (

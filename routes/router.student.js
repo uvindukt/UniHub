@@ -6,7 +6,7 @@ const StudentController = require("../controller/controller.student");
 const router = express.Router();
 
 /**
- * @route GET api/students
+ * @route GET api/student
  * @desc Retrieve all students.
  * @access Public.
  */
@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
 });
 
 /**
- * @route GET api/students/:id
+ * @route GET api/student/:id
  * @desc Retrieve a specific student from the given ID.
  * @access Public
  */
