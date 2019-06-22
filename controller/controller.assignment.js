@@ -4,6 +4,12 @@ const bucketName = "unihub-instructor";
 
 class AssignmentController {
 
+    /**
+     * @desc Create a new assignment.
+     * @param file
+     * @param data
+     * @returns {Promise<JSON>}
+     */
     static createAssignment(file, data) {
 
         return new Promise((resolve, reject) => {
@@ -36,6 +42,29 @@ class AssignmentController {
         });
 
     };
+
+    /**
+     * @desc Get assignments.
+     * @param courseId
+     * @returns {Promise<any>}
+     */
+    static getAssignments(courseId) {
+
+        return new Promise((resolve, reject) => {
+
+            Assignment
+                .find({course: courseId})
+                .exec()
+                .then(assignments => {
+                    assignments.length >= 1
+                        ? resolve({ status: 200, assignments })
+                        : reject({ status: 404, msg: "There are no any assignments.", assignments });
+                })
+                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        });
+
+    }
 
 }
 

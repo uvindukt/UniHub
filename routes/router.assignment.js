@@ -33,7 +33,10 @@ router.post("/", (req, res) => {
  */
 router.get("/course/:id", (req, res) => {
 
-    res.json({ msg: "hello" });
+    AssignmentController
+        .getAssignments(req.params.id)
+        .then(result => res.json(result))
+        .catch(err => res.status(err.status).json(err));
 
 });
 

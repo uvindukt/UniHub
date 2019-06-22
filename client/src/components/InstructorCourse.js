@@ -5,6 +5,7 @@ import {
 import { Redirect } from "react-router-dom";
 import Alert from "./Alert";
 import AddAssignment from "./AddAssignment"
+import InstructorAssignments from "./InstructorAssignments";
 
 class InstructorCourse extends Component {
     constructor(props) {
@@ -47,6 +48,7 @@ class InstructorCourse extends Component {
                 </Row>
                 <Row>
                     <Col md={6}>
+                        <InstructorAssignments course={this.state.course}/>
                     </Col>
                     <Col md={6}>
                         <AddAssignment course={this.state.course}/>
