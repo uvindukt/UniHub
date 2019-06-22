@@ -37,6 +37,7 @@ app.use("/api/student", require("./routes/router.student"));
 app.use("/api/admin", require("./routes/router.admin"));
 app.use("/api/course", require("./routes/router.course"));
 app.use("/api/instructor", require("./routes/router.instructor"));
+app.use("/api/assignment", require("./routes/router.assignment"));
 
 //Serve static in production
 if (process.env.NODE_ENV === "production") {

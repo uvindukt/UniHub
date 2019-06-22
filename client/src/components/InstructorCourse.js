@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import {
-    Col
+    Col, Row
 } from "reactstrap";
 import { Redirect } from "react-router-dom";
 import Alert from "./Alert";
+import AddAssignment from "./AddAssignment"
 
 class InstructorCourse extends Component {
     constructor(props) {
@@ -35,13 +36,22 @@ class InstructorCourse extends Component {
             alert = <Alert alertText={this.state.alertText} resetAlert={this.resetAlert}/>;
 
         return (
-            <div className="container-fluid row mx-0">
-                <Col md={12} className="container-fluid text-center">
-                    <h1 className="mt-4 mb-2 text-success">{this.state.course.name}</h1>
-                    <h4 className="text-muted">{this.state.course.code}</h4>
-                    <p className="text-muted">No. of Students - {this.state.course.students.length}</p>
-                    <hr/>
-                </Col>
+            <div className="container-fluid mx-0">
+                <Row>
+                    <Col md={12} className="container-fluid text-center">
+                        <h1 className="mt-4 mb-2 text-success">{this.state.course.name}</h1>
+                        <h4 className="text-muted">{this.state.course.code}</h4>
+                        <p className="text-muted">No. of Students - {this.state.course.students.length}</p>
+                        <hr/>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md={6}>
+                    </Col>
+                    <Col md={6}>
+                        <AddAssignment course={this.state.course}/>
+                    </Col>
+                </Row>
                 {alert}
             </div>
         );
