@@ -2,14 +2,13 @@ const { Storage } = require("@google-cloud/storage");
 const path = require("path");
 
 const projectId = require("../config/keys").projectId;
-//const keyFilename = path.resolve();
+const keyFilename = path.resolve("./config/gcs.json");
 const storage = new Storage({ projectId, keyFilename });
-const bucketName = "unihub-assignments";
 
 class GoogleCloudStorageService {
 
     // Makes an authenticated API request.
-    static async uploadFileToGoogleCloudStorage(uploaded) {
+    static async uploadFileToGoogleCloudStorage(bucketName, uploaded) {
 
         const bucket = await storage.bucket(bucketName);
 
@@ -18,7 +17,9 @@ class GoogleCloudStorageService {
 
         const stream = file.createWriteStream({
             metadata: {
-                contentType: uploaded.mimetype
+                contentType: uploaded.mimetype,
+                resumable: false,
+                gzip: true
             }
         });
 
@@ -30,11 +31,17 @@ class GoogleCloudStorageService {
         stream.on('finish', () => {
             uploaded.cloudStorageObject = gcsname;
             file.makePublic().then(() => {
-                uploaded.cloudStoragePublicUrl = `https://storage.googleapis.com/${bucketName}/${filename}`;
+                uploaded.cloudStoragePublicUrl = `https://storage.googleapis.com/${bucketName}/${gcsname}`;
             });
         });
 
-        stream.end(uploaded.file.buffer);
+        stream.end(uploaded.data);
+
+    }
+
+    static getPublicUrl(bucketName, fileName) {
+
+        return `https://storage.googleapis.com/${bucketName}/${fileName}`;
 
     }
 
