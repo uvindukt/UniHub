@@ -29,11 +29,11 @@ class StudentAssignmentItem extends Component {
         }, () => {
             fetch(`/api/solution/assignment/${this.state.assignment._id}/course/${this.props.course._id}/student/${this.props.session.user._id}`)
                 .then(response => response.json())
-                .then(result => {
-                    if (result.solution)
-                        this.setState({ solution: result.solution });
-                    return result;
-                })
+                .then(result =>
+                    result.solution
+                        ? this.setState({ solution: result.solution })
+                        : this.setState({ solution: null })
+                )
                 .catch(err => console.error(err));
         });
     }
@@ -78,13 +78,27 @@ class StudentAssignmentItem extends Component {
         if (this.state.alert)
             alert = <Alert alertText={this.state.alertText} resetAlert={this.resetAlert}/>;
 
-        let solution;
+        let solution, marks;
         if (this.state.solution != null) {
+
+            if (!this.state.solution.marks) {
+                marks = <React.Fragment>
+                    <ListGroupItemText
+                        className="text-muted mt-2 my-0">Not graded yet.</ListGroupItemText>
+                </React.Fragment>;
+            } else {
+                marks = <React.Fragment>
+                    <ListGroupItemText
+                        className="text-danger mt-2 my-0">Marks: {this.state.solution.marks}</ListGroupItemText>
+                </React.Fragment>;
+            }
+
             solution = <React.Fragment>
                 <ListGroupItemHeading>Solution</ListGroupItemHeading>
                 <ListGroupItemText
                     className="text-muted mt-2 my-0">Submitted: {this.state.solution.submitDate}</ListGroupItemText>
                 <ListGroupItemText className="text-muted mt-2 my-0">
+                    {marks}
                     <Link to={{ pathname: this.state.solution.attachment }} target="_blank">Download</Link>
                 </ListGroupItemText>
             </React.Fragment>;

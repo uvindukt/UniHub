@@ -32,13 +32,14 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 //API Routes.
-app.use("/api/auth", require("./routes/auth"));
+app.use("/api/auth", require("./routes/router.auth"));
 app.use("/api/student", require("./routes/router.student"));
 app.use("/api/admin", require("./routes/router.admin"));
 app.use("/api/course", require("./routes/router.course"));
 app.use("/api/instructor", require("./routes/router.instructor"));
 app.use("/api/assignment", require("./routes/router.assignment"));
 app.use("/api/solution", require("./routes/router.solution"));
+app.use("/api/notification", require("./routes/router.notification"));
 
 //Serve static in production
 if (process.env.NODE_ENV === "production") {

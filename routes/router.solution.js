@@ -66,4 +66,18 @@ router.get('/assignment/:assignmentId', (req, res) => {
 
 });
 
+/**
+ * @route PUT api/solution/{id}
+ * @desc Grade a solution.
+ * @access Public.
+ */
+router.put('/:id', (req, res) => {
+
+    SolutionController
+        .gradeSolution(req.params.id, req.body.marks)
+        .then(result => res.json(result))
+        .catch(err => res.status(err.status).json(err));
+
+});
+
 module.exports = router;

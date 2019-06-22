@@ -1,4 +1,6 @@
 const Assignment = require("../models/model.assignment");
+const Course = require("../models/model.course");
+const Notification = require("../models/model.notification");
 const GCSService = require("../service/service.storage");
 const bucketName = "unihub-instructor";
 
@@ -36,8 +38,28 @@ class AssignmentController {
                     .then(() => {
                         newAssignment
                             .save()
-                            .then(() => {
-                                resolve({ status: 200, msg: "Upload successful." });
+                            .then(assignment => {
+                                Course
+                                    .findById(assignment.course)
+                                    .then(course => {
+                                        course.students.forEach(studentId => {
+                                            let newNotification = new Notification({
+                                                user: studentId,
+                                                type: "student",
+                                                message: `Your have a new assignment in ${course.name} course.`
+                                            });
+                                            newNotification
+                                                .save()
+                                                .then(() => resolve({ status: 200, msg: "Upload successful." }))
+                                                .catch(err => reject({
+                                                    status: 500,
+                                                    msg: "Something went wrong.",
+                                                    err
+                                                }));
+                                        });
+
+                                    })
+                                    .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
                             })
                             .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
                     })

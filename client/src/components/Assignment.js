@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import AssignmentItem from "./AssignmentItem";
 import { Spinner } from "reactstrap";
 import ListGroup from "reactstrap/es/ListGroup";
+import { Redirect } from "react-router";
 
 class Assignment extends Component {
 
@@ -26,17 +27,6 @@ class Assignment extends Component {
         });
     }
 
-    componentWillReceiveProps(nextProps, nextContext) {
-        fetch(`/api/assignment/${nextProps.assignment._id}`)
-            .then(response => response.json())
-            .then(result => {
-                result.solutions.length > 0
-                    ? this.setState({ solutions: result.solutions })
-                    : this.setState({ solutions: null });
-            })
-            .catch(err => console.log(err));
-    }
-
     reload = () => {
         this.setState({ assignments: [] }, () => {
             fetch(`/api/assignment/${this.state.assignment._id}`)
@@ -51,6 +41,8 @@ class Assignment extends Component {
     };
 
     render() {
+
+        if (!this.props.session.isAuthenticated) return <Redirect to="/"/>;
 
         let solutions;
 

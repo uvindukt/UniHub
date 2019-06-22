@@ -154,7 +154,7 @@ class NavigationBar extends Component {
                         </DropdownItem>
                         <DropdownItem divider/>
                         <DropdownItem>
-                            <Link exact to="/instructor/notifications" className="navbar-brand">
+                            <Link exact to="/notifications" className="navbar-brand">
                                 <span style={{color: '#428bca', fontSize: 'large'}}>
                                 <FontAwesomeIcon
                                     icon={faBell}
@@ -193,7 +193,7 @@ class NavigationBar extends Component {
                         </DropdownItem>
                         <DropdownItem divider/>
                         <DropdownItem>
-                            <Link exact to="/student/notifications" className="navbar-brand">
+                            <Link exact to="/notifications" className="navbar-brand">
                                 <span style={{color: '#428bca', fontSize: 'large'}}>
                                 <FontAwesomeIcon
                                     icon={faBell}

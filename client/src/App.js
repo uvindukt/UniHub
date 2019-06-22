@@ -15,6 +15,7 @@ import StudentCoursesEnrolled from "./components/StudentCoursesEnrolled";
 import StudentCourse from "./components/StudentCourse";
 import InstructorCourse from "./components/InstructorCourse";
 import Assignment from "./components/Assignment";
+import Notifications from "./components/Notifications";
 import NotFound from "./components/NotFound";
 import { bake_cookie, read_cookie, delete_cookie } from "sfcookies";
 
@@ -101,6 +102,9 @@ class App extends Component {
                         )}/>
                         <Route exact path="/instructor/course/assignment" render={props => (
                             <Assignment {...props} session={this.state} login={this.login}/>
+                        )}/>
+                        <Route exact path="/notifications" render={props => (
+                            <Notifications {...props} session={this.state} login={this.login}/>
                         )}/>
                         <Route exact path="/instructor/course" render={props => (
                             <InstructorCourse {...props} session={this.state} login={this.login}/>

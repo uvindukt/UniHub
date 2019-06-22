@@ -1,6 +1,7 @@
 const Course = require("../models/model.course");
 const MailService = require("../service/service.mail");
 const mongoose = require("mongoose");
+const Notification = require("../models/model.notification");
 
 class CourseController {
 
@@ -31,7 +32,17 @@ class CourseController {
                                 MailService.sendMail(instructor.email, "Assigned to a course", message);
                                 return course;
                             })
-                            .then(course => resolve({ status: 200, msg: "Course created successfully.", course }))
+                            .then(course => {
+                                let newNotification = new Notification({
+                                    user: course.instructor._id,
+                                    type: 'instructor',
+                                    message: `You have been assigned to ${course.name} course. Go to courses to accept or reject.`
+                                });
+                                newNotification
+                                    .save()
+                                    .then(() => resolve({ status: 200, msg: "Course created successfully.", course }))
+                                    .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+                            })
                             .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
                     }
                 })
@@ -72,7 +83,7 @@ class CourseController {
         return new Promise((resolve, reject) => {
 
             Course
-                .find({students: studentId})
+                .find({ students: studentId })
                 .exec()
                 .then(courses =>
                     courses.length >= 1
@@ -264,8 +275,18 @@ class CourseController {
         return new Promise((resolve, reject) => {
 
             Course
-                .findByIdAndUpdate(courseId, { instructor: instructor, status: 'pending' })
-                .then(course => resolve({ status: 200, msg: `Instructor added to ${course.name}.`, course }))
+                .findByIdAndUpdate(courseId, { instructor: instructor, status: "pending" })
+                .then(course => {
+                    let newNotification = new Notification({
+                        user: course.instructor._id,
+                        type: 'instructor',
+                        message: `You have been assigned to ${course.name} course. Go to courses to accept or reject.`
+                    });
+                    newNotification
+                        .save()
+                        .then(() => resolve({ status: 200, msg: `Instructor added to ${course.name}.`, course }))
+                        .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+                })
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
         });
