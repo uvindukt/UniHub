@@ -13,12 +13,12 @@ const AssignmentSchema = mongoose.Schema({
     },
 
     addedDate: {
-        type: String,
+        type: Date,
         default: Date.now()
     },
 
     deadline: {
-        type: String,
+        type: Date,
         required: true
     },
 
@@ -29,4 +29,4 @@ const AssignmentSchema = mongoose.Schema({
 
 });
 
-module.exports = mongoose.model('assignment', AssignmentSchema);
+module.exports = mongoose.model('Assignment', AssignmentSchema);

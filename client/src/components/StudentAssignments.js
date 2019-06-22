@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import InstructorAssignmentItem from "./InstructorAssignmentItem";
+import StudentAssignmentItem from "./StudentAssignmentItem";
 import { Spinner } from "reactstrap";
+import { ListGroup } from "reactstrap";
 
-class InstructorAssignments extends Component {
+class StudentAssignments extends Component {
 
     constructor(props) {
         super(props);
@@ -59,7 +60,12 @@ class InstructorAssignments extends Component {
         } else if (this.state.assignments.length > 0) {
 
             assignments = this.state.assignments.map(assignment =>
-                <InstructorAssignmentItem key={assignment._id} reload={this.reload} assignment={assignment}/>
+                <StudentAssignmentItem
+                    key={assignment._id}
+                    reload={this.reload}
+                    course={this.props.course}
+                    session={this.props.session}
+                    assignment={assignment}/>
             );
 
         } else {
@@ -72,13 +78,13 @@ class InstructorAssignments extends Component {
         }
 
         return <React.Fragment>
-            <h1 className="mt-4 mb-4 text-success text-center">Assignments</h1>
-            <hr/>
-            {assignments}
+            <ListGroup>
+                {assignments}
+            </ListGroup>
         </React.Fragment>;
 
     }
 
 }
 
-export default InstructorAssignments;
+export default StudentAssignments;

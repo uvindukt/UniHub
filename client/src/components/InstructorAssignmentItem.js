@@ -66,7 +66,6 @@ class InstructorAssignmentItem extends Component {
         fetch(`/api/assignment/${this.state.assignment._id}`, packet)
             .then(result => result.json())
             .then(data => {
-                console.log(data);
                 data.success
                     ? this.setState({ alert: true, alertText: data.success })
                     : this.setState({ alert: true, alertText: data.msg });
@@ -85,11 +84,11 @@ class InstructorAssignmentItem extends Component {
         let course = <ListGroupItem key={this.state.assignment._id} className="text-left">
             <Row>
                 <Col md={5}>
-                    <ListGroupItemHeading>{this.state.assignment.name}</ListGroupItemHeading>
+                    <Link to={{pathname: '/instructor/course/assignment', state: {assignment: this.state.assignment}}}>
+                        <ListGroupItemHeading>{this.state.assignment.name}</ListGroupItemHeading></Link>
                     <ListGroupItemText className="text-muted mt-2 my-0">Deadline: {this.state.assignment.deadline}</ListGroupItemText>
                     <ListGroupItemText className="text-muted mt-2 my-0">
-                        <Link to={{ pathname: this.state.assignment.attachment }} target="_blank"
-                              key={this.state.assignment._id}>Download</Link>
+                        <Link to={{ pathname: this.state.assignment.attachment }} target="_blank">Download</Link>
                     </ListGroupItemText>
                 </Col>
                 <Col md={7}>

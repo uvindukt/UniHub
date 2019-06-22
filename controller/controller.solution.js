@@ -6,64 +6,146 @@ const bucketName = "unihub-student";
 class SolutionController {
 
     /**
-     * @desc Add solution for an assignment.
+     * @desc Add solution for an solution.
      * @param studentId
      * @param courseId
      * @param assignmentId
      * @param file
-     * @returns {Promise<any>}
+     * @returns {Promise<JSON>}
      */
     static addSolution(studentId, assignmentId, courseId, file) {
 
         return new Promise((resolve, reject) => {
 
-            Assignment
-                .findById(assignmentId)
+            Solution
+                .findOne({ student: studentId, assignment: assignmentId, course: courseId })
                 .exec()
-                .then(assignment => {
-                    if (assignment) {
+                .then(solution => {
 
-                        let deadline;
+                        Assignment
+                            .findById(assignmentId)
+                            .exec()
+                            .then(assignment => {
+                                if (assignment) {
 
-                        try {
-                            deadline = new Date(assignment.deadline);
-                        } catch (err) {
-                            reject({status: 500, msg: 'Something went wrong.'});
-                        }
+                                    let deadline;
 
-                        if (deadline >= Date.now()) {
+                                    try {
+                                        deadline = new Date(assignment.deadline);
+                                    } catch (err) {
+                                        reject({ status: 500, msg: "Something went wrong." });
+                                    }
 
-                            let newSolution = new Solution({
-                                student: studentId,
-                                course: courseId,
-                                assignment: assignmentId,
-                                attachment: GCSService.getPublicUrl(bucketName, file.name)
-                            });
+                                    if (deadline >= Date.now()) {
 
-                            GCSService
-                                .uploadFileToGoogleCloudStorage(bucketName, file)
-                                .then(() => {
-                                    newSolution
-                                        .save()
-                                        .then(() => {
-                                            resolve({ status: 200, msg: "Upload successful." });
-                                        })
-                                        .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
-                                })
-                                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+                                        let newSolution = new Solution({
+                                            student: studentId,
+                                            course: courseId,
+                                            assignment: assignmentId,
+                                            attachment: GCSService.getPublicUrl(bucketName, file.name)
+                                        });
 
-                        } else {
-                            reject({status: 400, msg: 'Assignment is overdue.'});
-                        }
+                                        GCSService
+                                            .uploadFileToGoogleCloudStorage(bucketName, file)
+                                            .then(() => {
 
-                    } else {
-                        reject({status: 404, msg: 'Could not find the assignment.'});
-                    }
+                                                if (solution) {
+
+                                                    Solution
+                                                        .findByIdAndUpdate(solution._id, {
+                                                            attachment: GCSService.getPublicUrl(bucketName, file.name)
+                                                        }, {new: true})
+                                                        .then(() => {
+                                                            resolve({ status: 200, msg: "Upload successful." });
+                                                        })
+                                                        .catch(err => reject({
+                                                            status: 500,
+                                                            msg: "Something went wrong.",
+                                                            err
+                                                        }));
+
+                                                } else {
+
+                                                    newSolution
+                                                        .save()
+                                                        .then(() => {
+                                                            resolve({ status: 200, msg: "Upload successful." });
+                                                        })
+                                                        .catch(err => reject({
+                                                            status: 500,
+                                                            msg: "Something went wrong.",
+                                                            err
+                                                        }));
+
+                                                }
+
+                                            })
+                                            .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+                                    } else {
+                                        reject({ status: 400, msg: "Assignment is overdue." });
+                                    }
+
+                                } else {
+                                    reject({ status: 404, msg: "Could not find the solution." });
+                                }
+
+                            })
+                            .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
                 })
                 .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
 
+
         });
+
+    }
+
+    /**
+     * @desc Get solution.
+     * @param studentId
+     * @param assignmentId
+     * @param courseId
+     * @returns {Promise<JSON>}
+     */
+    static getSolution(studentId, assignmentId, courseId) {
+
+        return new Promise((resolve, reject) => {
+
+            Solution
+                .findOne({ student: studentId, assignment: assignmentId, course: courseId })
+                .exec()
+                .then(solution => {
+                    solution
+                        ? resolve({ status: 200, solution })
+                        : reject({ status: 404, msg: "Could not find the solution." })
+                })
+                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        })
+
+    }
+
+    /**
+     * @desc Get solutions for an assignment.
+     * @param assignmentId
+     * @returns {Promise<JSON>}
+     */
+    static getSolutions(assignmentId) {
+
+        return new Promise((resolve, reject) => {
+
+            Solution
+                .find({ assignment: assignmentId })
+                .exec()
+                .then(solutions => {
+                    solutions
+                        ? resolve({ status: 200, solutions })
+                        : reject({ status: 404, msg: "Could not find any solutions." })
+                })
+                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        })
 
     }
 

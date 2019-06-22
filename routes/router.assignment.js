@@ -15,6 +15,8 @@ router.post("/", (req, res) => {
 
     const { files } = req;
 
+    console.log('Hello');
+
     if (files === null) {
 
         return res.status(400).json({ msg: "No file uploaded" });

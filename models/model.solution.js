@@ -13,8 +13,12 @@ const SolutionSchema = mongoose.Schema({
         required: true
     },
 
+    marks: {
+        type: Number
+    },
+
     submitDate: {
-        type: String,
+        type: Date,
         default: Date.now()
     },
 
@@ -30,4 +34,4 @@ const SolutionSchema = mongoose.Schema({
 
 });
 
-module.exports = mongoose.model('solution', SolutionSchema);
+module.exports = mongoose.model("Solution", SolutionSchema);
