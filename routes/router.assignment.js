@@ -7,7 +7,7 @@ const router = express.Router();
 router.use(fileUpload({ createParentPath: true }));
 
 /**
- * @route GET api/assignment
+ * @route POST api/assignment
  * @desc Create a new assignment.
  * @access Public.
  */
@@ -22,7 +22,18 @@ router.post("/", (req, res) => {
     AssignmentController
         .createAssignment(files.file, req.body)
         .then(result => res.json(result))
-        .catch(err => res.status(err.status).json(err))
+        .catch(err => res.status(err.status).json(err));
+
+});
+
+/**
+ * @route GET api/assignment/course/{id}
+ * @desc Get assignments of a course.
+ * @access Public.
+ */
+router.get("/course/:id", (req, res) => {
+
+    res.json({ msg: "hello" });
 
 });
 
