@@ -15,7 +15,7 @@ class AdminController {
         return new Promise((resolve, reject) => {
 
             let newAdmin = new Admin(data);
-            let password = genPass.generate({length: 4});
+            let password = genPass.generate({ length: 4 });
 
             bcrypt.genSalt(10)
                 .then(salt =>
@@ -35,7 +35,7 @@ class AdminController {
                                 newAdmin
                                     .save()
                                     .then(admin => {
-                                        MailService.sendMail(admin, password, 'Admin');
+                                        MailService.sendMail(admin.email, "UniHub Account", MailService.getUserCreatedMessage(admin, password, "Admin"));
                                         admin.password = undefined;
                                         return admin;
                                     })
@@ -152,7 +152,11 @@ class AdminController {
                                     .findByIdAndUpdate(id, updAdmin, { new: true })
                                     .select("-password")
                                     .exec()
-                                    .then(user => resolve({ status: 200, success: "Admin updated successfully.", user }))
+                                    .then(user => resolve({
+                                        status: 200,
+                                        success: "Admin updated successfully.",
+                                        user
+                                    }))
                                     .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
                             })
                             .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
