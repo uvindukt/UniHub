@@ -1,4 +1,6 @@
 const Instructor = require("../models/model.instructor");
+const Admin = require("../models/model.admin");
+const Student = require("../models/model.student");
 const bcrypt = require("bcryptjs");
 const genPass = require("generate-password");
 const MailService = require("../service/service.mail");
@@ -29,21 +31,45 @@ class InstructorController {
                         .exec()
                         .then(instructor => {
                             if (instructor) {
-                                reject({ status: 404, msg: "Instructor already exists." });
+                                reject({ status: 400, msg: "Instructor already exists." });
                             } else {
-                                newInstructor
-                                    .save()
-                                    .then(instructor => {
-                                        let message = MailService.getUserCreatedMessage(instructor, password, 'Instructor');
-                                        MailService.sendMail(instructor.email, "UniHub Account", message);
-                                        instructor.password = undefined;
-                                        return instructor;
+
+                                Admin
+                                    .findOne({ email: newInstructor.email })
+                                    .exec()
+                                    .then(admin => {
+
+                                        if (admin) {
+                                            reject({ status: 400, msg: "Another user already exists." });
+                                        } else {
+
+                                            Student
+                                                .findOne({ email: newInstructor.email })
+                                                .exec()
+                                                .then(student => {
+
+                                                    if (student) {
+                                                        reject({ status: 400, msg: "Another user already exists." });
+                                                    } else {
+                                                        newInstructor
+                                                            .save()
+                                                            .then(instructor => {
+                                                                let message = MailService.getUserCreatedMessage(instructor, password, 'Instructor');
+                                                                MailService.sendMail(instructor.email, "UniHub Account", message);
+                                                                instructor.password = undefined;
+                                                                return instructor;
+                                                            })
+                                                            .then(instructor => resolve({
+                                                                status: 200,
+                                                                msg: "Instructor created successfully.",
+                                                                instructor
+                                                            }))
+                                                            .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+                                                    }
+                                                })
+                                                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+                                        }
                                     })
-                                    .then(instructor => resolve({
-                                        status: 200,
-                                        msg: "Instructor created successfully.",
-                                        instructor
-                                    }))
                                     .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
                             }
                         })

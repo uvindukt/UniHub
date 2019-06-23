@@ -80,16 +80,6 @@ class SignUp extends Component {
                     : this.setState({ alert: true, alertText: data.msg });
                 return data;
             })
-            .then(data => {
-                setTimeout(() => {
-                    this.props.login({
-                        isAuthenticated: true,
-                        user: data.student,
-                        token: data.token,
-                        type: data.type
-                    });
-                }, 2000);
-            })
             .catch(err => console.error(err));
     };
 
@@ -111,8 +101,7 @@ class SignUp extends Component {
             </h1>
             <hr/>
             <p style={{ textAlign: "start" }}>
-              This privacy notice discloses the privacy practices for KEVIN
-              FASHIONS. This privacy notice applies solely to information
+              This privacy notice discloses the privacy practices for UniHub. This privacy notice applies solely to information
               collected by this website. It will notify you of the following:
             </p>
             <ul style={{ padding: "0 2rem", textAlign: "start" }}>

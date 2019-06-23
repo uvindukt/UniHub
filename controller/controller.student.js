@@ -2,6 +2,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const jwtSecret = require("../config/keys").jwtSecret;
 const Student = require("../models/model.student");
+const Admin = require("../models/model.admin");
+const Instructor = require("../models/model.instructor");
 
 class StudentController {
 
@@ -16,49 +18,77 @@ class StudentController {
 
             let newStudent = new Student(data);
 
-            Student.findOne({ email: data.email })
+            Student
+                .findOne({ email: data.email })
                 .exec()
                 .then(student => {
 
                     if (student) {
                         reject({ status: 400, msg: "Student already exists." });
                     } else {
-                        bcrypt
-                            .genSalt(10)
-                            .then(salt => {
 
-                                //Hashing the password before storing in database.
-                                bcrypt
-                                    .hash(newStudent.password, salt)
-                                    .then(hash => newStudent.password = hash)
-                                    .then(() => {
+                        Admin
+                            .findOne({email: data.email})
+                            .exec()
+                            .then(admin => {
 
-                                        newStudent
-                                            .save()
-                                            .then(student => {
+                                if (admin) {
+                                    reject({ status: 400, msg: "Another user already exists." });
+                                } else {
 
-                                                //Removing the password from returning student object.
-                                                student.password = undefined;
+                                    Instructor
+                                        .findOne({email: data.email})
+                                        .exec()
+                                        .then(instructor => {
 
-                                                //Adding the token to the newly registered student immediately.
-                                                jwt.sign({ id: student._id }, jwtSecret, (err, token) => {
-                                                    if (err)
-                                                        throw err;
-                                                    else
-                                                        resolve({
-                                                            success: "Student created successfully.",
-                                                            student,
-                                                            token,
-                                                            type: "student",
-                                                            status: 200
-                                                        });
-                                                });
+                                            if (instructor) {
+                                                reject({ status: 400, msg: "Another user already exists." });
+                                            } else {
 
-                                            })
-                                            .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+                                                bcrypt
+                                                    .genSalt(10)
+                                                    .then(salt => {
 
-                                    })
-                                    .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+                                                        //Hashing the password before storing in database.
+                                                        bcrypt
+                                                            .hash(newStudent.password, salt)
+                                                            .then(hash => newStudent.password = hash)
+                                                            .then(() => {
+
+                                                                newStudent
+                                                                    .save()
+                                                                    .then(student => {
+
+                                                                        //Removing the password from returning student object.
+                                                                        student.password = undefined;
+
+                                                                        //Adding the token to the newly registered student immediately.
+                                                                        jwt.sign({ id: student._id }, jwtSecret, (err, token) => {
+                                                                            if (err)
+                                                                                throw err;
+                                                                            else
+                                                                                resolve({
+                                                                                    success: "Student created successfully.",
+                                                                                    student,
+                                                                                    token,
+                                                                                    type: "student",
+                                                                                    status: 200
+                                                                                });
+                                                                        });
+
+                                                                    })
+                                                                    .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+                                                            })
+                                                            .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+                                                    })
+                                                    .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+                                            }
+
+                                        })
+                                        .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+                                }
 
                             })
                             .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
