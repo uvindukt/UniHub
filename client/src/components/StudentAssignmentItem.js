@@ -45,33 +45,6 @@ class StudentAssignmentItem extends Component {
         });
     };
 
-    handleSubmit = event => {
-
-        event.preventDefault();
-
-        const packet = {
-            method: "PUT",
-            headers: {
-                "Accept": "application/json, text/plain, */*",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                deadline: this.state.deadline,
-                currentDeadline: this.state.assignment.deadline
-            })
-        };
-
-        fetch(`/api/assignment/${this.state.assignment._id}`, packet)
-            .then(result => result.json())
-            .then(data => {
-                data.success
-                    ? this.setState({ alert: true, alertText: data.success })
-                    : this.setState({ alert: true, alertText: data.msg });
-                return data;
-            })
-            .catch(err => console.error(err));
-    };
-
     render() {
 
         let alert = "";
@@ -97,8 +70,8 @@ class StudentAssignmentItem extends Component {
                 <ListGroupItemHeading>Solution</ListGroupItemHeading>
                 <ListGroupItemText
                     className="text-muted mt-2 my-0">Submitted: {this.state.solution.submitDate}</ListGroupItemText>
+                {marks}
                 <ListGroupItemText className="text-muted mt-2 my-0">
-                    {marks}
                     <Link to={{ pathname: this.state.solution.attachment }} target="_blank">Download</Link>
                 </ListGroupItemText>
             </React.Fragment>;
@@ -106,7 +79,7 @@ class StudentAssignmentItem extends Component {
 
         let course = <ListGroupItem key={this.state.assignment._id} className="text-left">
             <Row>
-                <Col md={4}>
+                <Col md={4} className="my-3 my-md-0">
                     <ListGroupItemHeading>{this.state.assignment.name}</ListGroupItemHeading>
                     <ListGroupItemText
                         className="text-muted mt-2 my-0">Deadline: {this.state.assignment.deadline}</ListGroupItemText>
@@ -114,10 +87,10 @@ class StudentAssignmentItem extends Component {
                         <Link to={{ pathname: this.state.assignment.attachment }} target="_blank">Download</Link>
                     </ListGroupItemText>
                 </Col>
-                <Col md={4}>
+                <Col md={4} className="my-3 my-md-0">
                     {solution}
                 </Col>
-                <Col md={4}>
+                <Col md={4} className="my-3 my-md-0">
                     <AddSolution
                         key={this.state.assignment._id}
                         session={this.props.session}

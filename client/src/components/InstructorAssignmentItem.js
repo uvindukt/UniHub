@@ -55,7 +55,9 @@ class InstructorAssignmentItem extends Component {
             method: "PUT",
             headers: {
                 "Accept": "application/json, text/plain, */*",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "x-authorize-token": this.props.session.token,
+                "x-authorize-type": this.props.session.type
             },
             body: JSON.stringify({
                 deadline: this.state.deadline,
@@ -83,7 +85,7 @@ class InstructorAssignmentItem extends Component {
 
         let course = <ListGroupItem key={this.state.assignment._id} className="text-left">
             <Row>
-                <Col md={5}>
+                <Col md={5} className="my-3 my-md-0">
                     <Link to={{pathname: '/instructor/course/assignment', state: {assignment: this.state.assignment}}}>
                         <ListGroupItemHeading>{this.state.assignment.name}</ListGroupItemHeading></Link>
                     <ListGroupItemText className="text-muted mt-2 my-0">Deadline: {this.state.assignment.deadline}</ListGroupItemText>
@@ -91,7 +93,7 @@ class InstructorAssignmentItem extends Component {
                         <Link to={{ pathname: this.state.assignment.attachment }} target="_blank">Download</Link>
                     </ListGroupItemText>
                 </Col>
-                <Col md={7}>
+                <Col md={7} className="my-3 my-md-0">
                     <form onSubmit={this.handleSubmit}>
                         <div className="row container-fluid mr-0 pr-0">
                             <Col md={12} className="mb-0">

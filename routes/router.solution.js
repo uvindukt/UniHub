@@ -1,5 +1,7 @@
 const express = require("express");
 const fileUpload = require("express-fileupload");
+const authStudent = require("../middleware/authentication.student");
+const authInstructor = require("../middleware/authentication.instructor");
 const SolutionController = require("../controller/controller.solution");
 
 const router = express.Router();
@@ -9,9 +11,9 @@ router.use(fileUpload({ createParentPath: true }));
 /**
  * @route POST api/assignment/{assignmentId}/course/{courseId}/student/{studentId}
  * @desc Submit a solution.
- * @access Public.
+ * @access Private.
  */
-router.post("/assignment/:assignmentId/course/:courseId/student/:studentId", (req, res) => {
+router.post("/assignment/:assignmentId/course/:courseId/student/:studentId", authStudent, (req, res) => {
 
     const { files } = req;
 
@@ -39,7 +41,7 @@ router.post("/assignment/:assignmentId/course/:courseId/student/:studentId", (re
  * @desc Get a solution.
  * @access Public.
  */
-router.get('/assignment/:assignmentId/course/:courseId/student/:studentId', (req, res) => {
+router.get("/assignment/:assignmentId/course/:courseId/student/:studentId", (req, res) => {
 
     const { assignmentId, courseId, studentId } = req.params;
 
@@ -55,7 +57,7 @@ router.get('/assignment/:assignmentId/course/:courseId/student/:studentId', (req
  * @desc Get a solutions.
  * @access Public.
  */
-router.get('/assignment/:assignmentId', (req, res) => {
+router.get("/assignment/:assignmentId", (req, res) => {
 
     const { assignmentId } = req.params;
 
@@ -69,9 +71,9 @@ router.get('/assignment/:assignmentId', (req, res) => {
 /**
  * @route PUT api/solution/{id}
  * @desc Grade a solution.
- * @access Public.
+ * @access Private.
  */
-router.put('/:id', (req, res) => {
+router.put("/:id", authInstructor, (req, res) => {
 
     SolutionController
         .gradeSolution(req.params.id, req.body.marks)

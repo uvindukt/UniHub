@@ -1,5 +1,6 @@
 const express = require("express");
 const fileUpload = require("express-fileupload");
+const authInstructor = require("../middleware/authentication.instructor");
 const AssignmentController = require("../controller/controller.assignment");
 
 const router = express.Router();
@@ -9,13 +10,11 @@ router.use(fileUpload({ createParentPath: true }));
 /**
  * @route POST api/assignment
  * @desc Create a new assignment.
- * @access Public.
+ * @access Private.
  */
-router.post("/", (req, res) => {
+router.post("/", authInstructor, (req, res) => {
 
     const { files } = req;
-
-    console.log('Hello');
 
     if (files === null) {
 
@@ -53,7 +52,7 @@ router.get("/course/:id", (req, res) => {
  * @desc Change deadline.
  * @access Public.
  */
-router.put("/:id", (req, res) => {
+router.put("/:id", authInstructor, (req, res) => {
 
     AssignmentController
         .changeDeadline(req.params.id, req.body.deadline, req.body.currentDeadline)

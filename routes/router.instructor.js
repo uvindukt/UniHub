@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
 /**
  * @route POST api/instructor
  * @desc Create a new instructor.
- * @access Public.
+ * @access Private.
  */
 router.post('/', authAdmin, (req, res) => {
 
@@ -80,7 +80,7 @@ router.put('/:id', authInstructor, validation, (req, res) => {
  * @desc Delete an instructor from given ID.
  * @access Private.
  */
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authInstructor, (req, res) => {
 
     InstructorController
         .deleteInstructorById(req.params.id)

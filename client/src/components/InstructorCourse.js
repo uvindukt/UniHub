@@ -52,10 +52,10 @@ class InstructorCourse extends Component {
                 </Row>
                 <Row>
                     <Col md={6}>
-                        <InstructorAssignments course={this.state.course}/>
+                        <InstructorAssignments course={this.state.course} session={this.props.session}/>
                     </Col>
                     <Col md={6}>
-                        <AddAssignment reload={this.reload} course={this.state.course}/>
+                        <AddAssignment reload={this.reload} course={this.state.course} session={this.props.session}/>
                     </Col>
                 </Row>
                 {alert}

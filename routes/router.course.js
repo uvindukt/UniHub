@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
+const authInstructor = require("../middleware/authentication.instructor");
+const authAdmin = require("../middleware/authentication.admin");
 const CourseController = require('../controller/controller.course');
 const InstructorController = require("../controller/controller.instructor");
 
 /**
  * @desc Retrieve all courses.
  * @route GET /api/course
- * @access Private
+ * @access Public
  */
 router.get('/', (req, res) => {
 
@@ -20,7 +22,7 @@ router.get('/', (req, res) => {
 /**
  * @desc Retrieve joined courses for a student.
  * @route GET /api/course/joined/{studentId}
- * @access Private
+ * @access Public
  */
 router.get('/joined/:studentId', (req, res) => {
 
@@ -36,7 +38,7 @@ router.get('/joined/:studentId', (req, res) => {
 /**
  * @desc Retrieve accepted courses.
  * @route GET /api/course/accepted
- * @access Private
+ * @access Public
  */
 router.get('/accepted', (req, res) => {
 
@@ -50,7 +52,7 @@ router.get('/accepted', (req, res) => {
 /**
  * @desc Retrieve courses from given instructor ID.
  * @route GET /api/course/instructor/{instructorId}
- * @access Private
+ * @access Public
  */
 router.get('/instructor/:id', (req, res) => {
 
@@ -64,7 +66,7 @@ router.get('/instructor/:id', (req, res) => {
 /**
  * @desc Retrieve courses from given ID.
  * @route GET /api/course/{id}
- * @access Private
+ * @access Public
  */
 router.get('/:id', (req, res) => {
 
@@ -78,7 +80,7 @@ router.get('/:id', (req, res) => {
 /**
  * @desc Retrieve courses from given code.
  * @route GET /api/course/code/{code}
- * @access Private
+ * @access Public
  */
 router.get('/code/:code', (req, res) => {
 
@@ -94,7 +96,7 @@ router.get('/code/:code', (req, res) => {
  * @route PUT /api/course/accept/{id}
  * @access Private
  */
-router.put('/accept/:id', (req, res) => {
+router.put('/accept/:id', authInstructor, (req, res) => {
 
     CourseController
         .acceptCourse(req.params.id)
@@ -108,7 +110,7 @@ router.put('/accept/:id', (req, res) => {
  * @route PUT /api/course/accept/{id}
  * @access Private
  */
-router.put('/reject/:id', (req, res) => {
+router.put('/reject/:id', authInstructor, (req, res) => {
 
     CourseController
         .rejectCourse(req.params.id)
@@ -154,7 +156,7 @@ router.put('/:courseId/student/:studentId/leave', (req, res) => {
  * @route POST /api/course
  * @access Private
  */
-router.post('/', (req, res) => {
+router.post('/', authAdmin, (req, res) => {
 
     InstructorController
         .getInstructorById(req.body.instructor)
@@ -174,7 +176,7 @@ router.post('/', (req, res) => {
  * @route PUT /api/course/{id}/instructor
  * @access Private
  */
-router.put('/:id/instructor', (req, res) => {
+router.put('/:id/instructor', authAdmin, (req, res) => {
 
     InstructorController
         .getInstructorById(req.body.instructor)

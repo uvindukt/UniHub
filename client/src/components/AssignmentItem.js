@@ -49,7 +49,9 @@ class AssignmentItem extends Component {
             method: "PUT",
             headers: {
                 "Accept": "application/json, text/plain, */*",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "x-authorize-token": this.props.session.token,
+                "x-authorize-type": this.props.session.type
             },
             body: JSON.stringify({
                 marks: this.state.marks

@@ -59,7 +59,7 @@ class InstructorAssignments extends Component {
         } else if (this.state.assignments.length > 0) {
 
             assignments = this.state.assignments.map(assignment =>
-                <InstructorAssignmentItem key={assignment._id} reload={this.reload} assignment={assignment}/>
+                <InstructorAssignmentItem key={assignment._id} reload={this.reload} session={this.props.session} assignment={assignment}/>
             );
 
         } else {

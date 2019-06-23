@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import AssignmentItem from "./AssignmentItem";
 import { Spinner } from "reactstrap";
 import ListGroup from "reactstrap/es/ListGroup";
-import { Redirect } from "react-router";
+import { Redirect } from "react-router-dom";
 
 class Assignment extends Component {
 

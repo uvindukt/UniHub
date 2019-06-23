@@ -8,9 +8,9 @@ const router = express.Router();
 /**
  * @route GET api/admin
  * @desc Retrieve all admins.
- * @access Public.
+ * @access Private.
  */
-router.get("/", (req, res) => {
+router.get("/", authAdmin, (req, res) => {
 
     AdminController
         .getAllAdmins()
@@ -78,9 +78,9 @@ router.put('/:id', authAdmin, validation, (req, res) => {
 /**
  * @route DELETE api/admin/{id}
  * @desc Delete an admin from given ID.
- * @access Public.
+ * @access Private.
  */
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authAdmin, (req, res) => {
 
     AdminController
         .deleteAdminById(req.params.id)

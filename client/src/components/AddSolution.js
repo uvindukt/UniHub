@@ -58,7 +58,9 @@ class AddSolution extends Component {
 
             const res = await axios.post(`/api/solution/assignment/${this.state.assignment}/course/${this.state.course}/student/${this.state.student}`, formData, {
                 headers: {
-                    "Content-Type": "multipart/form-data"
+                    "Content-Type": "multipart/form-data",
+                    "x-authorize-token": this.props.session.token,
+                    "x-authorize-type": this.props.session.type
                 },
                 onUploadProgress: progressEvent => {
                     this.setState({
