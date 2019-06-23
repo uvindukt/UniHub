@@ -25,6 +25,25 @@ class NotificationController {
 
     }
 
+    /**
+     * @desc Delete notifications.
+     * @param notificationId
+     * @returns {Promise<any>}
+     */
+    static deleteNotification(notificationId) {
+
+        return new Promise((resolve, reject) => {
+
+            Notification
+                .findByIdAndRemove(notificationId, { new: true })
+                .exec()
+                .then(() => resolve({ status: 200, success: "Notification deleted." }))
+                .catch(err => reject({ status: 500, msg: "Something went wrong.", err }));
+
+        });
+
+    }
+
 }
 
 module.exports = NotificationController;

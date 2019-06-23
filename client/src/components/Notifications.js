@@ -6,6 +6,10 @@ import { Redirect } from "react-router-dom";
 import Alert from "./Alert";
 import ListGroupItem from "reactstrap/es/ListGroupItem";
 import ListGroupItemText from "reactstrap/es/ListGroupItemText";
+import Button from "reactstrap/es/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import Row from "reactstrap/es/Row";
 
 class Notifications extends Component {
     constructor(props) {
@@ -24,10 +28,31 @@ class Notifications extends Component {
             .then(result => {
                 result.notifications.length > 0
                     ? this.setState({ notifications: result.notifications })
-                    : this.setState({ notifications: null })
+                    : this.setState({ notifications: null });
             })
             .catch(err => console.log(err));
     }
+
+    handleClick = notificationId => {
+        fetch(`/api/notification/${notificationId}`, {
+            method: "DELETE",
+            headers: {
+                "Accept": "application/json, text/plain, */*",
+                "Content-Type": "application/json"
+            }
+        }).then(() => {
+
+            fetch(`/api/notification/${this.props.session.user._id}`)
+                .then(response => response.json())
+                .then(result => {
+                    result.notifications.length > 0
+                        ? this.setState({ notifications: result.notifications })
+                        : this.setState({ notifications: null });
+                })
+                .catch(err => console.log(err));
+
+        }).catch(err => console.error(err));
+    };
 
     resetAlert = () => {
         this.setState({
@@ -57,9 +82,21 @@ class Notifications extends Component {
             notifications = this.state.notifications.map(notification => {
                 return <React.Fragment key={notification._id}>
                     <ListGroupItem>
-                        <ListGroupItemText className="text-muted text-left">
-                            {notification.message}
-                        </ListGroupItemText>
+                        <Row>
+                            <Col md={10}>
+                                <ListGroupItemText className="text-muted text-left">
+                                    {notification.message}
+                                </ListGroupItemText>
+                            </Col>
+                            <Col md={2}>
+                                <form>
+                                    <Button className="mt-2 button" onClick={() => this.handleClick(notification._id)}>
+                                        <FontAwesomeIcon icon={faTimes}/>
+                                        &ensp;Delete
+                                    </Button>
+                                </form>
+                            </Col>
+                        </Row>
                     </ListGroupItem>
                 </React.Fragment>;
             });

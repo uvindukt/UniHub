@@ -240,7 +240,8 @@ class StudentController {
 
         return new Promise((resolve, reject) => {
 
-            Student.findByIdAndRemove(id, { new: true })
+            Student
+                .findByIdAndRemove(id, { new: true })
                 .select("-password")
                 .exec()
                 .then(student => resolve({ status: 200, success: "Student successfully deleted.", student }))

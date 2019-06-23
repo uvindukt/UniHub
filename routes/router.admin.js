@@ -10,12 +10,12 @@ const router = express.Router();
  * @desc Retrieve all admins.
  * @access Private.
  */
-router.get("/", authAdmin, (req, res) => {
+router.get("/", (req, res) => {
 
     AdminController
         .getAllAdmins()
         .then(result => res.json(result))
-        .catch(err => res.status(err.status).json(err))
+        .catch(err => res.status(err.status).json(err));
 
 });
 
@@ -29,7 +29,7 @@ router.get("/:email", (req, res) => {
     AdminController
         .getAdminByEmail(req.params.email)
         .then(result => res.json(result))
-        .catch(err => res.status(err.status).json(err))
+        .catch(err => res.status(err.status).json(err));
 
 });
 
@@ -43,7 +43,7 @@ router.get("/:id", (req, res) => {
     AdminController
         .getAdminById(req.params.id)
         .then(result => res.json(result))
-        .catch(err => res.status(err.status).json(err))
+        .catch(err => res.status(err.status).json(err));
 
 });
 
@@ -52,12 +52,12 @@ router.get("/:id", (req, res) => {
  * @desc Create an admin.
  * @access Private.
  */
-router.post('/', authAdmin, validation, (req, res) => {
+router.post("/", authAdmin, validation, (req, res) => {
 
     AdminController
         .createAdmin(req.body)
         .then(result => res.json(result))
-        .catch(err => res.status(err.status).json(err))
+        .catch(err => res.status(err.status).json(err));
 
 });
 
@@ -66,12 +66,12 @@ router.post('/', authAdmin, validation, (req, res) => {
  * @desc Update an admin from given ID.
  * @access Private.
  */
-router.put('/:id', authAdmin, validation, (req, res) => {
+router.put("/:id", authAdmin, validation, (req, res) => {
 
     AdminController
         .updateAdminById(req.params.id, req.body)
         .then(result => res.json(result))
-        .catch(err => res.status(err.status).json(err))
+        .catch(err => res.status(err.status).json(err));
 
 });
 
@@ -80,12 +80,12 @@ router.put('/:id', authAdmin, validation, (req, res) => {
  * @desc Delete an admin from given ID.
  * @access Private.
  */
-router.delete('/:id', authAdmin, (req, res) => {
+router.delete("/:id", authAdmin, (req, res) => {
 
     AdminController
         .deleteAdminById(req.params.id)
         .then(result => res.json(result))
-        .catch(err => res.status(err.status).json(err))
+        .catch(err => res.status(err.status).json(err));
 
 });
 

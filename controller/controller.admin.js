@@ -67,7 +67,7 @@ class AdminController {
                 .select("-password")
                 .exec()
                 .then(admins => {
-                    admins.length >= 1
+                    admins.length > 0
                         ? resolve({ status: 200, admins })
                         : reject({ status: 404, msg: "There are no any admins.", admins });
                 })

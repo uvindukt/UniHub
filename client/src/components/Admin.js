@@ -38,9 +38,9 @@ class Admin extends Component {
 
     componentDidMount() {
         document.title = "UniHub | Admin";
-        fetch('/api/admin')
+        fetch("/api/admin")
             .then(response => response.json())
-            .then(result => this.setState({admins: result.admins}))
+            .then(result => this.setState({ admins: result.admins }))
             .catch(err => console.log(err));
     }
 
@@ -81,9 +81,9 @@ class Admin extends Component {
                 data.success
                     ? this.setState({ alert: true, alertText: data.success })
                     : this.setState({ alert: true, alertText: data.msg });
-                fetch('/api/admin')
+                fetch("/api/admin")
                     .then(response => response.json())
-                    .then(result => this.setState({admins: result.admins}))
+                    .then(result => this.setState({ admins: result.admins }))
                     .catch(err => console.log(err));
                 return data;
             })
@@ -93,7 +93,7 @@ class Admin extends Component {
 
     render() {
 
-        if (!this.props.session.isAuthenticated || this.props.session.type !== 'admin') return <Redirect to="/"/>;
+        if (!this.props.session.isAuthenticated || this.props.session.type !== "admin") return <Redirect to="/"/>;
 
         let alert = "";
         if (this.state.alert)
@@ -109,7 +109,7 @@ class Admin extends Component {
             );
         } else {
             admins = <div className="mt-4 text-success">
-                <span style={{fontSize: '2rem'}}>Loading</span>&emsp;
+                <span style={{ fontSize: "2rem" }}>Loading</span>&emsp;
                 <Spinner size="lg"/>
             </div>;
         }
@@ -152,23 +152,23 @@ class Admin extends Component {
                             <div className="row container-fluid mr-0 pr-0">
                                 <Col md={12} className="mb-0">
                                     <FormGroup className="text-left">
-                                    <InputGroup>
-                                        <InputGroupAddon addonType="prepend">
-                                            <InputGroupText className="adTextBox">
-                                                <FontAwesomeIcon icon={faEnvelope}/>
-                                            </InputGroupText>
-                                        </InputGroupAddon>
-                                        <Input
-                                            autoComplete="off"
-                                            required
-                                            value={this.state.email}
-                                            onChange={this.handleChange}
-                                            className="textBox"
-                                            type="email"
-                                            name="email"
-                                            placeholder="E-Mail"
-                                        />
-                                    </InputGroup>
+                                        <InputGroup>
+                                            <InputGroupAddon addonType="prepend">
+                                                <InputGroupText className="adTextBox">
+                                                    <FontAwesomeIcon icon={faEnvelope}/>
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                            <Input
+                                                autoComplete="off"
+                                                required
+                                                value={this.state.email}
+                                                onChange={this.handleChange}
+                                                className="textBox"
+                                                type="email"
+                                                name="email"
+                                                placeholder="E-Mail"
+                                            />
+                                        </InputGroup>
                                         <FormText className="ml-3">Please enter a valid email address.</FormText>
                                     </FormGroup>
                                 </Col>
